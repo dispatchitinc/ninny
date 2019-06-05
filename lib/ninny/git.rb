@@ -42,13 +42,21 @@ module Ninny
       branch.delete
     end
 
+    # Public: The list of branches on GitHub
+    #
+    # Returns an Array of Strings containing the branch names
+    def self.remote_branches
+      GIT.fetch
+      GIT.branches.remote.map{ |branch| GIT.branch(branch.name) }
+    end
+
     # Public: List of branches starting with the given string
     #
     # prefix - String to match branch names against
     #
     # Returns an Array of Branches containing the branch name
     def self.branches_for(prefix)
-      GIT.branches.remote.select do |branch|
+      remote_branches.select do |branch|
         branch.name =~ /^#{prefix}/
       end
     end

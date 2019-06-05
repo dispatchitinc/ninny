@@ -72,7 +72,7 @@ module Ninny
     def extra_branches
       case branch_type
       when Git::DEPLOYABLE_PREFIX, Git::STAGING_PREFIX, Git::QAREADY_PREFIX
-        Git.branches_for(branch_type) - [Git.branch(branch_name)]
+        Git.branches_for(branch_type).select{ |branch| branch.name != (branch_name) }
       else
         raise InvalidBranchType, "'#{branch_type}' is not a valid branch type"
       end
