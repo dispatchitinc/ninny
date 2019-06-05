@@ -14,7 +14,7 @@ module Ninny
       command('branch', ['--no-track', new_branch_name, "origin/#{source_branch_name}"])
       branch = GIT.branch(new_branch_name)
       branch.checkout
-      command('push', '-u', 'origin', branch)
+      command('push', ['-u', 'origin', branch])
     end
 
     def self.command(*args)
