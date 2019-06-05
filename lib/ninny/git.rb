@@ -36,7 +36,7 @@ module Ninny
     # Public: Delete the given branch
     #
     # branch_name - The name of the branch to delete
-    def delete_branch(branch_name)
+    def self.delete_branch(branch_name)
       branch = GIT.branch(branch_name)
       GIT.push('origin', ":#{branch}")
       branch.delete
