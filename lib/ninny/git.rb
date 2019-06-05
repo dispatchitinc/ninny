@@ -13,7 +13,7 @@ module Ninny
       GIT.lib.send(:command, *args)
     end
 
-    def branch(*args)
+    def self.branch(*args)
       GIT.branch(*args)
     end
 
