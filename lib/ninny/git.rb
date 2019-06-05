@@ -11,10 +11,14 @@ module Ninny
 
     def self.new_branch(new_branch_name, source_branch_name)
       GIT.fetch
-      GIT.lib.send(:command, 'branch', ['--no-track', new_branch_name, "origin/#{source_branch_name}"])
+      command('branch', ['--no-track', new_branch_name, "origin/#{source_branch_name}"])
       branch = GIT.branch(new_branch_name)
       branch.checkout
-      GIT.push('-u origin', branch)
+      command('push', '-u' 'origin', branch)
+    end
+
+    private def self.command(*args)
+      GIT.lib.send(:command, *args)
     end
   end
 end
