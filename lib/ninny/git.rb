@@ -13,6 +13,10 @@ module Ninny
       GIT.lib.send(:command, *args)
     end
 
+    def branch(*args)
+      GIT.branch(*args)
+    end
+
     # Public: Create a new branch from the given source
     #
     # new_branch_name - The name of the branch to create
@@ -28,8 +32,6 @@ module Ninny
       branch.checkout
       command('push', ['-u', 'origin', branch])
     end
-
-
 
     # Public: Delete the given branch
     #

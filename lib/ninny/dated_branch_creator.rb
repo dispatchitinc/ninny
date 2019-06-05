@@ -56,7 +56,7 @@ module Ninny
     # Public: If necessary, and if user opts to, delete old branches of its type
     def delete_old_branches
       return unless extra_branches.any?
-      should_delete = should_delete_old_branches || cli.ask_boolean("Do you want to delete the old #{branch_type} branch(es)? (#{extra_branches.join(", ")})")
+      should_delete = should_delete_old_branches || TTY::Prompt.new.yes?("Do you want to delete the old #{branch_type} branch(es)? (#{extra_branches.join(", ")})")
 
       if should_delete
         extra_branches.each do |extra|
@@ -71,7 +71,7 @@ module Ninny
     def extra_branches
       case branch_type
       when Git::DEPLOYABLE_PREFIX, Git::STAGING_PREFIX, Git::QAREADY_PREFIX
-        Git.branches_for(branch_type) - [branch_name]
+        Git.branches_for(branch_type) - [Git.branch(branch_name)]
       else
         raise InvalidBranchType, "'#{branch_type}' is not a valid branch type"
       end
