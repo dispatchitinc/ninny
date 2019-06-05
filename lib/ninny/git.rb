@@ -9,8 +9,10 @@ module Ninny
 
     def self.new_branch(new_branch_name, source_branch_name)
       GIT.fetch
-      GIT.branch("origin/#{source_branch_name}")
-      GIT.branch(new_branch_name)
+      GIT.lib.command('branch', ['--no-track', new_branch_name, "origin/#{source_branch_name}"])
+      branch = GIT.branch(new_branch_name)
+      branch.checkout
+      GIT.push('-u origin', branch)
     end
   end
 end

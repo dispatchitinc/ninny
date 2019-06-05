@@ -33,12 +33,12 @@ module Ninny
     # Public: Create the branch and handle related processing
     def perform
       create_branch
-      delete_old_branches
+      #delete_old_branches
     end
 
     # Public: Create the desired branch
     def create_branch
-      git.new_branch(branch_name, config.deploy_branch)
+      Git.new_branch(branch_name, config.deploy_branch)
     end
 
     # Public: The date suffix to append to the branch name
