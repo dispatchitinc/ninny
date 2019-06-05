@@ -17,7 +17,7 @@ module Ninny
       command('push', '-u' 'origin', branch)
     end
 
-    private def self.command(*args)
+    def self.command(*args)
       GIT.lib.send(:command, *args)
     end
   end
