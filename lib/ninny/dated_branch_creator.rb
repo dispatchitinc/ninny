@@ -30,7 +30,7 @@ module Ninny
     # Public: Create the branch and handle related processing
     def perform
       create_branch
-      #delete_old_branches
+      delete_old_branches
     end
 
     # Public: Create the desired branch
