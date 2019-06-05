@@ -1,11 +1,8 @@
 require "date"
+require_relative "git"
 
 module Ninny
   class DatedBranchCreator
-    include ConfigWrapper
-    include CLIWrapper
-    include GitWrapper
-
     attr_accessor :branch_type
     attr_accessor :should_delete_old_branches
 
@@ -38,7 +35,7 @@ module Ninny
 
     # Public: Create the desired branch
     def create_branch
-      Git.new_branch(branch_name, config.deploy_branch)
+      Git.new_branch(branch_name, 'master')
     end
 
     # Public: The date suffix to append to the branch name
