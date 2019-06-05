@@ -1,5 +1,6 @@
 require "date"
 require_relative "git"
+require 'tty-prompt'
 
 module Ninny
   class DatedBranchCreator
@@ -56,7 +57,7 @@ module Ninny
     # Public: If necessary, and if user opts to, delete old branches of its type
     def delete_old_branches
       return unless extra_branches.any?
-      should_delete = should_delete_old_branches || TTY::Prompt.new.yes?("Do you want to delete the old #{branch_type} branch(es)? (#{extra_branches.join(", ")})")
+      should_delete = should_delete_old_branches || ::TTY::Prompt.new.yes?("Do you want to delete the old #{branch_type} branch(es)? (#{extra_branches.join(", ")})")
 
       if should_delete
         extra_branches.each do |extra|
