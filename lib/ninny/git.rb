@@ -7,7 +7,7 @@ module Ninny
     STAGING_PREFIX = "staging"
     QAREADY_PREFIX = "qaready"
 
-
+    GIT = ::Git.open(Dir.pwd)
 
     def self.command(*args)
       GIT.lib.send(:command, *args)
