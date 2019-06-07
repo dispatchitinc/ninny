@@ -4,11 +4,9 @@ module Ninny
 
     def initialize
       @config = TTY::Config.new
-      @config.filename = 'ninny'
+      @config.filename = '.ninny'
       @config.extname = '.yml'
       @config.prepend_path Dir.home
-      @config.append_path Dir.pwd
-      @read = false
       @config.read
     end
 
@@ -20,20 +18,12 @@ module Ninny
       config.set(*args)
     end
 
-    def repository_user
-      fetch(:repository_user)
-    end
-
-    def repository_api_token
-      fetch(:repository_api_token)
-    end
-
-    def repository
-      fetch(:repository)
+    def gitlab_private_token
+      config.fetch(:gitlab_private_token)
     end
 
     def self.config
-      UserConfig.new
+      new
     end
   end
 end

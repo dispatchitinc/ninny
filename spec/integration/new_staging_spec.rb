@@ -6,9 +6,10 @@ Usage:
   ninny new_staging
 
 Options:
-  -h, [--help], [--no-help]  # Display usage information
+  -h, [--help], [--no-help]                                # Display usage information
+  -d, [--delete-old-branches], [--no-delete-old-branches]  # Should old staging branches be deleted?
 
-Command description...
+Create a new staging branch
     OUT
 
     expect(output).to eq(expected_output)

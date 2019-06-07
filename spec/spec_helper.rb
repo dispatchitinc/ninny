@@ -1,4 +1,5 @@
 require "bundler/setup"
+require 'byebug'
 require "ninny"
 
 RSpec.configure do |config|
@@ -10,5 +11,29 @@ RSpec.configure do |config|
 
   config.expect_with :rspec do |c|
     c.syntax = :expect
+  end
+end
+
+class GitStub
+end
+
+module Git
+  def self.open(*args)
+    GitStub.new
+  end
+end
+
+class GitlabStub
+end
+
+module Gitlab
+  def self.client(*args)
+    GitlabStub.new
+  end
+end
+
+module Ninny
+  def self.repo
+    @repo ||= GitlabStub.new
   end
 end

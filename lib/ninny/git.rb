@@ -1,5 +1,3 @@
-require 'git'
-
 module Ninny
   class Git
     # branch prefixes
@@ -7,28 +5,37 @@ module Ninny
     STAGING_PREFIX = "staging"
     QAREADY_PREFIX = "qaready"
 
-    GIT = ::Git.open(Dir.pwd)
+    attr_reader :git
 
-    def self.command(*args)
-      GIT.lib.send(:command, *args)
+    def initialize
+      @git = ::Git.open(Dir.pwd)
     end
 
-    def self.branch(*args)
-      GIT.branch(*args)
+    def command(*args)
+      git.lib.send(:command, *args)
+    end
+
+    def branch(*args)
+      git.branch(*args)
+    end
+
+    def current_branch
+      git.branch(git.current_branch)
+    end
+
+    def merge(branch_name)
+      git.fetch
+      current_branch.merge("origin/#{branch_name}")
     end
 
     # Public: Create a new branch from the given source
     #
     # new_branch_name - The name of the branch to create
     # source_branch_name - The name of the branch to branch from
-    #
-    # Example:
-    #
-    #   Git.new_branch("bug-123-fix-thing", "master")
-    def self.new_branch(new_branch_name, source_branch_name)
-      GIT.fetch
+    def new_branch(new_branch_name, source_branch_name)
+      git.fetch
       command('branch', ['--no-track', new_branch_name, "origin/#{source_branch_name}"])
-      branch = GIT.branch(new_branch_name)
+      branch = git.branch(new_branch_name)
       branch.checkout
       command('push', ['-u', 'origin', branch])
     end
@@ -36,18 +43,18 @@ module Ninny
     # Public: Delete the given branch
     #
     # branch_name - The name of the branch to delete
-    def self.delete_branch(branch_name)
-      branch = branch_name.is_a?(::Git::Branch) ? branch_name : GIT.branch(branch_name)
-      GIT.push('origin', ":#{branch}")
+    def delete_branch(branch_name)
+      branch = branch_name.is_a?(::Git::Branch) ? branch_name : git.branch(branch_name)
+      git.push('origin', ":#{branch}")
       branch.delete
     end
 
     # Public: The list of branches on GitHub
     #
     # Returns an Array of Strings containing the branch names
-    def self.remote_branches
-      GIT.fetch
-      GIT.branches.remote.map{ |branch| GIT.branch(branch.name) }
+    def remote_branches
+      git.fetch
+      git.branches.remote.map{ |branch| git.branch(branch.name) }.sort_by(&:name)
     end
 
     # Public: List of branches starting with the given string
@@ -55,10 +62,23 @@ module Ninny
     # prefix - String to match branch names against
     #
     # Returns an Array of Branches containing the branch name
-    def self.branches_for(prefix)
+    def branches_for(prefix)
       remote_branches.select do |branch|
         branch.name =~ /^#{prefix}/
       end
     end
+
+    # Public: Most recent branch starting with the given string
+    #
+    # prefix - String to match branch names against
+    #
+    # Returns an Array of Branches containing the branch name
+    def latest_branch_for(prefix)
+      branches_for(prefix).last || raise(NoBranchOfType, "No #{prefix} branch")
+    end
+
+    # Exceptions
+    NotOnBranch = Class.new(StandardError)
+    NoBranchOfType = Class.new(StandardError)
   end
 end
