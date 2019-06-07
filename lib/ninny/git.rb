@@ -1,9 +1,16 @@
 module Ninny
   class Git
+    extend Forwardable
+    NO_BRANCH = "(no branch)"
+    DEFAULT_DIRTY_MESSAGE = "Your Git index is not clean. Commit, stash, or otherwise clean up the index before continuing."
+    DIRTY_CONFIRM_MESSAGE = "Your Git index is not clean. Do you want to continue?"
+
     # branch prefixes
     DEPLOYABLE_PREFIX = "deployable"
     STAGING_PREFIX = "staging"
     QAREADY_PREFIX = "qaready"
+
+    def_delegators :git, :branch
 
     attr_reader :git
 
@@ -15,17 +22,40 @@ module Ninny
       git.lib.send(:command, *args)
     end
 
-    def branch(*args)
-      git.branch(*args)
+    def current_branch
+      git.branch(current_branch_name)
     end
 
-    def current_branch
-      git.branch(git.current_branch)
+    def current_branch_name
+      name = git.current_branch
+      if name == NO_BRANCH
+        raise NotOnBranch, "Not currently checked out to a particular branch"
+      else
+        name
+      end
     end
 
     def merge(branch_name)
-      git.fetch
-      current_branch.merge("origin/#{branch_name}")
+      if_clean do
+        git.fetch
+        current_branch.merge("origin/#{branch_name}")
+        raise MergeFailed unless clean?
+        push
+      end
+    end
+
+    # Public: Push the current branch to GitHub
+    def push
+      if_clean do
+        git.push('origin', current_branch_name)
+      end
+    end
+
+    # Public: Pull the latest changes for the checked-out branch
+    def pull
+      if_clean do
+        command('pull')
+      end
     end
 
     # Public: Create a new branch from the given source
@@ -35,9 +65,9 @@ module Ninny
     def new_branch(new_branch_name, source_branch_name)
       git.fetch
       command('branch', ['--no-track', new_branch_name, "origin/#{source_branch_name}"])
-      branch = git.branch(new_branch_name)
-      branch.checkout
-      command('push', ['-u', 'origin', branch])
+      new_branch = branch(new_branch_name)
+      new_branch.checkout
+      command('push', ['-u', 'origin', new_branch_name])
     end
 
     # Public: Delete the given branch
@@ -77,8 +107,42 @@ module Ninny
       branches_for(prefix).last || raise(NoBranchOfType, "No #{prefix} branch")
     end
 
+
+    # Public: Whether the Git index is clean (has no uncommited changes)
+    #
+    # Returns a Boolean
+    def clean?
+      command('status', '--short').empty?
+    end
+
+    # Public: Perform the block if the Git index is clean
+    def if_clean(message=DEFAULT_DIRTY_MESSAGE)
+      if clean? || prompt.yes?(DIRTY_CONFIRM_MESSAGE)
+        yield
+      else
+        alert_dirty_index message
+        exit 1
+      end
+    end
+
+    # Public: Display the message and show the git status
+    def alert_dirty_index(message)
+      prompt.say " "
+      prompt.say message
+      prompt.say " "
+      prompt.say command('status')
+      raise DirtyIndex
+    end
+
+    def prompt(**options)
+      require 'tty-prompt'
+      TTY::Prompt.new(options)
+    end
+
+
     # Exceptions
     NotOnBranch = Class.new(StandardError)
     NoBranchOfType = Class.new(StandardError)
+    DirtyIndex = Class.new(StandardError)
   end
 end

@@ -1,3 +1,4 @@
+require 'forwardable'
 require 'ninny/git'
 require 'ninny/command'
 require 'ninny/commands/create_dated_branch'
