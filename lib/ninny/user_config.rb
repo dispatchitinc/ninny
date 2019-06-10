@@ -7,7 +7,7 @@ module Ninny
       @config.filename = '.ninny'
       @config.extname = '.yml'
       @config.prepend_path Dir.home
-      @config.read
+      @read = false
     end
 
     def write(*args)
@@ -19,11 +19,29 @@ module Ninny
     end
 
     def gitlab_private_token
-      config.fetch(:gitlab_private_token)
+      with_read do
+        config.fetch(:gitlab_private_token)
+      end
+    end
+
+    def read
+      config.read unless @read
+    end
+
+    def with_read
+      begin
+        read
+      rescue TTY::Config::ReadError
+        raise MissingUserConfig.new("User config not found, run `ninny setup`")
+      end
+      @read = true
+      yield
     end
 
     def self.config
       new
     end
   end
+
+  MissingUserConfig = Class.new(StandardError)
 end

@@ -1,6 +1,7 @@
 require "bundler/setup"
 require 'byebug'
 require "ninny"
+require 'tty-config'
 
 RSpec.configure do |config|
   # Enable flags like --only-failures and --next-failure
@@ -35,5 +36,10 @@ end
 module Ninny
   def self.repo
     @repo ||= GitlabStub.new
+  end
+end
+
+class TTY::Config
+  def write(*args)
   end
 end
