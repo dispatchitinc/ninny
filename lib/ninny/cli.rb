@@ -18,6 +18,18 @@ module Ninny
     end
     map %w(--version -v) => :version
 
+    desc 'staging_branch', 'Returns the current staging branch'
+    method_option :help, aliases: '-h', type: :boolean,
+                         desc: 'Display usage information'
+    def staging_branch(*)
+      if options[:help]
+        invoke :help, ['staging_branch']
+      else
+        require_relative 'commands/staging_branch'
+        Ninny::Commands::StagingBranch.new(options).execute
+      end
+    end
+
     desc 'stage_up [PULL_REQUEST_ID]', 'Merges PR/MR into the staging branch'
     method_option :help, aliases: '-h', type: :boolean,
                          desc: 'Display usage information'
