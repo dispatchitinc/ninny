@@ -20,8 +20,9 @@ RSpec.describe Ninny::Commands::NewStaging do
 
   context '#create_branch' do
     it 'should create new branch' do
+      allow(Ninny).to receive(:project_config).and_return(double(:config, deploy_branch: 'masterx'))
       expect(subject).to receive(:branch_name).and_return('staging.2019.09.16')
-      expect(Ninny.git).to receive(:new_branch).with('staging.2019.09.16', 'master')
+      expect(Ninny.git).to receive(:new_branch).with('staging.2019.09.16', 'masterx')
       subject.create_branch
     end
   end

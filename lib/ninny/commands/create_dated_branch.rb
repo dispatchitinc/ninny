@@ -17,7 +17,7 @@ module Ninny
 
       # Public: Create the desired branch
       def create_branch
-        Ninny.git.new_branch(branch_name, 'master')
+        Ninny.git.new_branch(branch_name, Ninny.project_config.deploy_branch)
       end
 
       # Public: The date suffix to append to the branch name
