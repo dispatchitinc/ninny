@@ -10,8 +10,8 @@ Gem::Specification.new do |spec|
   spec.authors       = ["Carl Allen"]
   spec.email         = ["carl.allen@dispatchwithus.com"]
 
-  spec.summary       = "ninny you git"
-  spec.description   = "ninny is a set of command line tools to add on to git"
+  spec.summary       = "ninny (n): an foolish person, see: git"
+  spec.description   = "Ninny is a command line workflow for git"
   # spec.homepage      = "TODO: Put your gem's website or public repo URL here."
 
   # Prevent pushing this gem to RubyGems.org. To allow pushes either set the 'allowed_push_host'
