@@ -1,7 +1,7 @@
 PATH
   remote: .
   specs:
-    ninny (0.1.0)
+    ninny (0.1.1)
       git (~> 1.5.0)
       gitlab (~> 4.11.0)
       pastel (~> 0.7.2)

@@ -25,15 +25,15 @@ module Ninny
     end
 
     def read
-      config.read unless @read
-    end
-
-    def with_read
       begin
-        read
+      config.read unless @read
       rescue TTY::Config::ReadError
         raise MissingUserConfig.new("User config not found, run `ninny setup`")
       end
+    end
+
+    def with_read
+      read
       @read = true
       yield
     end
