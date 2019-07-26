@@ -31,7 +31,11 @@ module Ninny
       end
 
       def prompt_for_gitlab_private_token
-        new_token_text = config.gitlab_private_token ? ' new' : ''
+        begin
+          new_token_text = config.gitlab_private_token ? ' new' : ''
+        rescue MissingUserConfig
+          new_token_text = 'new'
+        end
         if prompt.yes?("Do you have a#{new_token_text} gitlab private token?")
           private_token = prompt.ask("Enter private token", required: true)
           config.set(:gitlab_private_token, value: private_token)
