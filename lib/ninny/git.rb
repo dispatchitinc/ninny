@@ -38,7 +38,7 @@ module Ninny
     def merge(branch_name)
       if_clean do
         git.fetch
-        current_branch.merge("origin/#{branch_name}")
+        command 'merge', '--no-ff', "origin/#{branch_name}"
         raise MergeFailed unless clean?
         push
       end
@@ -55,6 +55,19 @@ module Ninny
     def pull
       if_clean do
         command('pull')
+      end
+    end
+
+    # Public: Check out the given branch name
+    #
+    # branch_name - The name of the branch to check out
+    # do_after_pull - Should a pull be done after checkout?
+    def check_out(branch, do_after_pull=true)
+      git.fetch
+      branch.checkout
+      git.pull if do_after_pull
+      unless current_branch.name == branch.name
+        raise CheckoutFailed, "Failed to check out '#{branch}'"
       end
     end
 
@@ -141,6 +154,7 @@ module Ninny
 
 
     # Exceptions
+    CheckoutFailed = Class.new(StandardError)
     NotOnBranch = Class.new(StandardError)
     NoBranchOfType = Class.new(StandardError)
     DirtyIndex = Class.new(StandardError)
