@@ -38,7 +38,7 @@ module Ninny
     def merge(branch_name)
       if_clean do
         git.fetch
-        command 'merge', '--no-ff', "origin/#{branch_name}"
+        command 'merge', ['--no-ff', "origin/#{branch_name}"]
         raise MergeFailed unless clean?
         push
       end
