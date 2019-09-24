@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module Ninny
   class Git
     extend Forwardable
@@ -65,7 +67,7 @@ module Ninny
     def check_out(branch, do_after_pull=true)
       git.fetch
       branch.checkout
-      git.pull if do_after_pull
+      pull if do_after_pull
       unless current_branch.name == branch.name
         raise CheckoutFailed, "Failed to check out '#{branch}'"
       end
