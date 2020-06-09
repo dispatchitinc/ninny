@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 
 lib = File.expand_path("../lib", __FILE__)
 $LOAD_PATH.unshift(lib) unless $LOAD_PATH.include?(lib)
@@ -61,7 +63,7 @@ Gem::Specification.new do |spec|
   spec.add_dependency "thor", "~> 0.20.0"
 
   spec.add_dependency "git", "~> 1.5.0"
-  spec.add_dependency "gitlab", "~> 4.11.0"
+  spec.add_dependency "gitlab", "~> 4.11"
 
   spec.add_development_dependency "bundler", "~> 1.17"
   spec.add_development_dependency "rake", "~> 10.0"
