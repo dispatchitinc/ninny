@@ -33,7 +33,8 @@ module Ninny
 
      # Public: Check out the branch
       def check_out_branch
-        Ninny.git.check_out(branch_to_merge_into)
+        Ninny.git.check_out(branch_to_merge_into, false)
+        Ninny.git.track_current_branch
       rescue Ninny::Git::NoBranchOfType
         prompt.say "No #{branch_type} branch available. Creating one now."
         CreateDatedBranch.new(branch: branch_type).execute

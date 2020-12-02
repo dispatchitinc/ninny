@@ -73,6 +73,15 @@ module Ninny
       end
     end
 
+    # Public: Track remote branch matching current branch
+    #
+    # do_after_pull - Should a pull be done after tracking?
+    def track_current_branch(do_after_pull=true)
+      command('branch', '-u', "origin/#{current_branch_name}")
+      pull if do_after_pull
+    end
+
+
     # Public: Create a new branch from the given source
     #
     # new_branch_name - The name of the branch to create
