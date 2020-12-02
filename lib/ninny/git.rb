@@ -77,7 +77,7 @@ module Ninny
     #
     # do_after_pull - Should a pull be done after tracking?
     def track_current_branch(do_after_pull=true)
-      command('branch', '-u', "origin/#{current_branch_name}")
+      command('branch', ['-u', "origin/#{current_branch_name}"])
       pull if do_after_pull
     end
 
