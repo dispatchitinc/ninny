@@ -13,3 +13,5 @@
 
 # ninny configs
 .ninny.yml*
+
+Gemfile.lock

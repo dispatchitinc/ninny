@@ -22,13 +22,13 @@ RSpec.describe Ninny::Git do
 
   context '#current_branch' do
     it 'should return current_branch from git' do
-      expect(subject.git).to receive(:current_branch).and_return('master')
-      expect(subject.git).to receive(:branch).with('master')
+      expect(subject.git).to receive(:current_branch).and_return('main')
+      expect(subject.git).to receive(:branch).with('main')
       subject.current_branch
     end
   end
 
-  context "#merge" do
+  fcontext "#merge" do
     it 'should fetch and merge branch_name' do
       expect(subject.git).to receive(:fetch)
       current_branch = double(:current_branch)
@@ -44,10 +44,10 @@ RSpec.describe Ninny::Git do
       new_branch = double(:new_branch)
       expect(new_branch).to receive(:checkout)
       expect(subject.git).to receive(:fetch)
-      expect(subject).to receive(:command).with('branch', ['--no-track', 'new_branch', "origin/master"])
+      expect(subject).to receive(:command).with('branch', ['--no-track', 'new_branch', "origin/main"])
       expect(subject).to receive(:branch).with('new_branch').and_return(new_branch)
       expect(subject).to receive(:command).with('push', ['-u', 'origin', 'new_branch'])
-      subject.new_branch('new_branch', 'master')
+      subject.new_branch('new_branch', 'main')
     end
   end
 
