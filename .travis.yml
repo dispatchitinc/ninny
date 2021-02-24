@@ -13,3 +13,4 @@ before_install: gem install bundler -v 1.17.3
 branches:
   only:
     - main
+    - master
