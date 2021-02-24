@@ -4,7 +4,11 @@ os: linux
 cache: bundler
 
 rvm:
+  - 2.6.3
   - 2.6.6
+  - 2.7.0
+  - 2.7.1
+  - 2.7.2
 
 before_install: gem install bundler -v 1.17.3
 
