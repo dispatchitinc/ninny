@@ -1,10 +1,11 @@
 RSpec.describe Ninny::Git do
   subject { Ninny::Git.new }
   let(:git_lib) { double(:lib) }
+
   before do
-  allow(git_lib).to receive(:command).with('status', '--short').and_return('')
-   allow(subject.git).to receive(:lib).and_return(git_lib)
- end
+    allow(git_lib).to receive(:command).with('status', '--short').and_return('')
+    allow(subject.git).to receive(:lib).and_return(git_lib)
+  end
 
   context '#branch' do
     it 'should call git.branch' do
@@ -28,12 +29,11 @@ RSpec.describe Ninny::Git do
     end
   end
 
-  fcontext "#merge" do
+  context "#merge" do
     it 'should fetch and merge branch_name' do
       expect(subject.git).to receive(:fetch)
       current_branch = double(:current_branch)
-      expect(current_branch).to receive(:merge).with('origin/branch_to_merge')
-      expect(subject).to receive(:current_branch).and_return(current_branch)
+      expect(git_lib).to receive(:command).with('merge', ['--no-ff', 'origin/branch_to_merge'])
       expect(subject).to receive(:push)
       subject.merge('branch_to_merge')
     end

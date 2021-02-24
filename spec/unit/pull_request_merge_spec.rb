@@ -4,6 +4,7 @@ require 'tty-prompt'
 RSpec.describe Ninny::Commands::PullRequestMerge do
   let(:branch_type) { Ninny::Git::STAGING_PREFIX }
   subject { Ninny::Commands::PullRequestMerge.new(1, {}) }
+
   it "executes `stage_up` command successfully" do
     output = StringIO.new
 
@@ -16,7 +17,12 @@ RSpec.describe Ninny::Commands::PullRequestMerge do
 
   context '#check_out_branch' do
     xit 'should check out the branch to merge into' do
-      branch = double(:branch)
+      branch = double(name: 'current_branch')
+      allow(@git).to receive(:fetch).and_return(true)
+      allow_any_instance_of(Ninny::Git).to receive(:current_branch).and_return(double(name: 'current_branch'))
+      allow_any_instance_of(Ninny::Git).to receive(:current_branch_name).and_return('current_branch')
+      allow_any_instance_of(Ninny::Git).to receive(:command)
+      allow_any_instance_of(Ninny::Git).to receive(:clean?).and_return(true)
       allow(Ninny.git).to receive(:latest_branch_for).and_return(branch)
       expect(branch).to receive(:checkout)
       subject.check_out_branch
