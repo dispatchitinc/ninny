@@ -65,9 +65,28 @@ At any point, `ninny help` will show the help screen.
 
 ## Development
 
-After checking out the repo, run `bin/setup` to install dependencies. Then, run `rake spec` to run the tests. You can also run `bin/console` for an interactive prompt that will allow you to experiment.
+### Making Changes
 
-To install this gem onto your local machine, run `bundle exec rake install`. To release a new version, update the version number in `version.rb`, and then run `bundle exec rake release`, which will create a git tag for the version, push git commits and tags, and push the `.gem` file to [rubygems.org](https://rubygems.org).
+1. Check out or fork the repository
+2. Create a feature branch for your changes
+3. Run `bundle install`
+4. Make your changes
+5. Run `bundle exec rake` to run the tests
+  * Run `bundle exec guard` to run them continuously as you develop
+6. Test the gem locally
+  * Run `gem build *.gemspec` to build the gem locally
+  * Run `gem install --local ninny-x.x.x.gem` to install the gem locally
+7. Make a pull request back to this repository
+
+### Releasing
+
+1. Make sure the `lib/ninny/version.rb` file is updated with a new version
+2. Run `git tag vX.X.X && git push --tag`
+3. Run `gem build *.gemspec`
+4. Run `gem push *.gem` to push the new version to RubyGems
+5. Run `rm *.gem` to clean up your local repository
+
+To set up your local machine to push to RubyGems via the API, see the [RubyGems documentation](https://guides.rubygems.org/publishing/#publishing-to-rubygemsorg).
 
 ## Contributing
 
