@@ -2,7 +2,7 @@
 
 Ninny is a command line workflow for git with GitLab. It is maintained by the engineers of Dispatch.
 
-We use Ninny to help us automate our developmen pipelines. We create weekly staging branches straight from `main`, merge feature branches into the current staging branch, and deploy to our staging environment directly from the current staging branch. We date all of our staging branches with `YYYY.MM.DD` appended to the end so that if we need to recreate a new staging branch mid-week (typically if the staging branch gets very out of date from `main`), then we know exactly which branch is the latest.
+We use Ninny to help us automate our development pipelines. We create weekly staging branches straight from `main`, merge feature branches into the current staging branch, and deploy to our staging environment directly from the current staging branch. We date all of our staging branches with `YYYY.MM.DD` appended to the end so that if we need to recreate a new staging branch mid-week (typically if the staging branch gets very out of date from `main`), then we know exactly which branch is the latest.
 
 Ninny is based off of [SportsEngine's Octopolo](https://github.com/sportngin/octopolo) command-line tool.
 
@@ -47,18 +47,26 @@ Enter private token abc123def456ghi789jk # enter your private token
 User config updated
 ```
 
-If that command doesn't work, then you can manually update that file like this:
+The private token should be a personal access token for that person's GitLab account (generated [here](https://gitlab.com/-/profile/personal_access_tokens)).
+
+If that command doesn't work, then you can manually create/update that file like this:
 
 ```yml
 gitlab_private_token: abc123def456ghi789jk # private token goes here
 ```
 
-After the config files are set up, there are the commands available:
+After the config files are set up, these commands are available:
 
 ```bash
-$ ninny new_staging # to create a new staging branch of this format: staging.YYYY.MM.DD
-$ ninny staging_branch # to list the current/latest staging branch
-$ ninny stage_up # to merge the current branch into the current/latest staging branch
+# To create a new staging branch of this format: staging.YYYY.MM.DD
+$ ninny new_staging
+
+# To list the current/latest staging branch
+$ ninny staging_branch
+
+# To merge the current branch into the current/latest staging branch
+$ ninny stage_up
+
 ```
 
 At any point, `ninny help` will show the help screen.
@@ -67,15 +75,15 @@ At any point, `ninny help` will show the help screen.
 
 ### Making Changes
 
-1. Check out or fork the repository
+1. Clone or fork the repository
 2. Create a feature branch for your changes
 3. Run `bundle install`
 4. Make your changes
 5. Run `bundle exec rake` to run the tests
-  * Run `bundle exec guard` to run them continuously as you develop
+    * Run `bundle exec guard` to run tests continuously as you develop
 6. Test the gem locally
-  * Run `gem build *.gemspec` to build the gem locally
-  * Run `gem install --local ninny-x.x.x.gem` to install the gem locally
+    * Run `gem build *.gemspec` to build the gem locally
+    * Run `gem install --local ninny-x.x.x.gem` to install the gem locally
 7. Make a pull request back to this repository
 
 ### Releasing
@@ -94,7 +102,7 @@ Bug reports and pull requests are welcome on GitHub at https://github.com/dispat
 
 ## Code of Conduct
 
-Everyone interacting in the Ninny project’s codebases, issue trackers, chat rooms and mailing lists is expected to follow the [Contributor Covenant](http://contributor-covenant.org) code of conduct.
+Everyone interacting in the Ninny project’s codebases, issue trackers, chat rooms, and mailing lists is expected to follow the [Contributor Covenant](http://contributor-covenant.org) code of conduct.
 
 ## Copyright
 
