@@ -16,15 +16,12 @@ RSpec.describe Ninny::Commands::PullRequestMerge do
   end
 
   context '#check_out_branch' do
-    xit 'should check out the branch to merge into' do
-      branch = double(name: 'current_branch')
-      allow(@git).to receive(:fetch).and_return(true)
-      allow_any_instance_of(Ninny::Git).to receive(:current_branch).and_return(double(name: 'current_branch'))
-      allow_any_instance_of(Ninny::Git).to receive(:current_branch_name).and_return('current_branch')
-      allow_any_instance_of(Ninny::Git).to receive(:command)
-      allow_any_instance_of(Ninny::Git).to receive(:clean?).and_return(true)
+    it 'should check out the branch to merge into' do
+      branch = double(:branch)
       allow(Ninny.git).to receive(:latest_branch_for).and_return(branch)
-      expect(branch).to receive(:checkout)
+      expect(Ninny.git).to receive(:check_out).with(branch, false)
+      allow(Ninny.git).to receive(:current_branch_name).and_return('branch')
+      allow(Ninny.git).to receive(:command).and_return([])
       subject.check_out_branch
     end
 
