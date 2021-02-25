@@ -19,6 +19,6 @@ jobs:
     - uses: ruby/setup-ruby@v1
       with:
         ruby-version: ${{ matrix.ruby }}
-        bundler: Gemfile.lock
+        bundler: 1.17.3
         bundler-cache: true
     - run: bundle exec rake
