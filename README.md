@@ -36,7 +36,7 @@ Bug reports and pull requests are welcome on GitHub at https://github.com/[USERN
 
 ## Code of Conduct
 
-Everyone interacting in the Ninny project’s codebases, issue trackers, chat rooms and mailing lists is expected to follow the [code of conduct](https://github.com/[USERNAME]/ninny/blob/master/CODE_OF_CONDUCT.md).
+Everyone interacting in the Ninny project’s codebases, issue trackers, chat rooms and mailing lists is expected to follow the [code of conduct](https://github.com/[USERNAME]/ninny/blob/main/CODE_OF_CONDUCT.md).
 
 ## Copyright
 
