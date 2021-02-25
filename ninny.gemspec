@@ -8,7 +8,7 @@ Gem::Specification.new do |spec|
   spec.name          = "ninny"
   spec.license       = "MIT"
   spec.version       = Ninny::VERSION
-  spec.authors       = ["Carl Allen", "Emma Sax"]
+  spec.authors       = ["Dispatch Engineers"]
   spec.email         = ["engineers@dispatchit.com"]
 
   spec.summary       = "ninny (n): an foolish person, see: git"
