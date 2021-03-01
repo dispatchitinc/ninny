@@ -47,7 +47,7 @@ RSpec.describe Ninny::Commands::Setup do
     it 'should ask for and set the new token' do
       expect(Ninny.user_config).to receive(:gitlab_private_token)
       expect_any_instance_of(TTY::Prompt).to receive(:yes?).with('Do you have a GitLab private token?').and_return(true)
-      expect_any_instance_of(TTY::Prompt).to receive(:ask).with('Enter private token', required: true).and_return('yyy')
+      expect_any_instance_of(TTY::Prompt).to receive(:ask).with('Enter private token:', required: true).and_return('yyy')
       expect(Ninny.user_config).to receive(:set).with(:gitlab_private_token, value: 'yyy')
       subject.prompt_for_gitlab_private_token
     end
