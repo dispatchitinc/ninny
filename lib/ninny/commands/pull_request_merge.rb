@@ -8,13 +8,11 @@ module Ninny
       attr_accessor :pull_request_id, :options, :pull_request
       attr_reader :branch_type
 
-      # rubocop:disable Lint/MissingSuper
       def initialize(pull_request_id, options)
         @branch_type = options[:branch_type] || Ninny::Git::STAGING_PREFIX
         self.pull_request_id = pull_request_id
         self.options = options
       end
-      # rubocop:enable Lint/MissingSuper
 
       def execute(*)
         unless pull_request_id

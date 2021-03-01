@@ -7,12 +7,10 @@ module Ninny
     class Setup < Ninny::Command
       attr_reader :config
 
-      # rubocop:disable Lint/MissingSuper
       def initialize(options)
         @options = options
         @config = Ninny.user_config
       end
-      # rubocop:enable Lint/MissingSuper
 
       def execute(output: $stdout)
         try_reading_user_config

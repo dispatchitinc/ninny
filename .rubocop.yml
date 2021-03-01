@@ -16,3 +16,6 @@ Lint/EmptyClass:
 
 Lint/EmptyBlock:
   Enabled: false
+
+Lint/MissingSuper:
+  Enabled: false
