@@ -16,11 +16,10 @@ module Ninny
       require_relative 'version'
       puts "v#{Ninny::VERSION}"
     end
-    map %w(--version -v) => :version
+    map %w[--version -v] => :version
 
     desc 'staging_branch', 'Returns the current staging branch'
-    method_option :help, aliases: '-h', type: :boolean,
-                         desc: 'Display usage information'
+    method_option :help, aliases: '-h', type: :boolean, desc: 'Display usage information'
     def staging_branch(*)
       if options[:help]
         invoke :help, ['staging_branch']
@@ -31,8 +30,7 @@ module Ninny
     end
 
     desc 'stage_up [PULL_REQUEST_ID]', 'Merges PR/MR into the staging branch'
-    method_option :help, aliases: '-h', type: :boolean,
-                         desc: 'Display usage information'
+    method_option :help, aliases: '-h', type: :boolean, desc: 'Display usage information'
     def stage_up(pull_request_id = nil)
       if options[:help]
         invoke :help, ['stage_up']
@@ -43,11 +41,8 @@ module Ninny
     end
 
     desc 'new_staging', 'Create a new staging branch'
-    method_option :help, aliases: '-h', type: :boolean,
-                         desc: 'Display usage information'
-    method_option :delete_old_branches, aliases: ['-d'], type: :boolean,
-                                        desc: "Should old staging branches be deleted?"
-
+    method_option :help, aliases: '-h', type: :boolean, desc: 'Display usage information'
+    method_option :delete_old_branches, aliases: ['-d'], type: :boolean, desc: 'Should old staging branches be deleted?'
     def new_staging(*)
       if options[:help]
         invoke :help, ['new_staging']
@@ -58,8 +53,7 @@ module Ninny
     end
 
     desc 'setup', 'Interactively setup configuration'
-    method_option :help, aliases: '-h', type: :boolean,
-                         desc: 'Display usage information'
+    method_option :help, aliases: '-h', type: :boolean, desc: 'Display usage information'
     def setup(*)
       if options[:help]
         invoke :help, ['setup']

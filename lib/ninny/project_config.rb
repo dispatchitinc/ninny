@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module Ninny
   class ProjectConfig
     attr_reader :config
@@ -31,14 +33,14 @@ module Ninny
     end
 
     def gitlab_endpoint
-      config.fetch(:gitlab_endpoint, default: "https://gitlab.com/api/v4")
+      config.fetch(:gitlab_endpoint, default: 'https://gitlab.com/api/v4')
     end
 
     def repo
       return unless repo_type
 
       repo_class = { gitlab: Repository::Gitlab }[repo_type.to_sym]
-      repo_class && repo_class.new
+      repo_class&.new
     end
 
     def self.config

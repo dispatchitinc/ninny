@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module Ninny
   class UserConfig
     attr_reader :config
@@ -25,11 +27,9 @@ module Ninny
     end
 
     def read
-      begin
       config.read unless @read
-      rescue TTY::Config::ReadError
-        raise MissingUserConfig.new("User config not found, run `ninny setup`")
-      end
+    rescue TTY::Config::ReadError
+      raise MissingUserConfig, 'User config not found, run `ninny setup`'
     end
 
     def with_read

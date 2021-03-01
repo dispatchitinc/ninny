@@ -1,11 +1,15 @@
+# frozen_string_literal: true
+
 require 'ninny/commands/stage_up'
 require 'tty-prompt'
+
+# rubocop:disable Metrics/BlockLength
 
 RSpec.describe Ninny::Commands::PullRequestMerge do
   let(:branch_type) { Ninny::Git::STAGING_PREFIX }
   subject { Ninny::Commands::PullRequestMerge.new(1, {}) }
 
-  it "executes `stage_up` command successfully" do
+  it 'executes `stage_up` command successfully' do
     output = StringIO.new
 
     expect(subject).to receive(:check_out_branch)
@@ -48,7 +52,7 @@ RSpec.describe Ninny::Commands::PullRequestMerge do
       pr = double(:pull_request)
       allow(subject).to receive(:branch_to_merge_into).and_return('staging')
       allow(subject).to receive(:pull_request).and_return(pr)
-      expect(pr).to receive(:write_comment).with("Merged into staging.")
+      expect(pr).to receive(:write_comment).with('Merged into staging.')
       subject.comment_about_merge
     end
   end
@@ -67,3 +71,5 @@ RSpec.describe Ninny::Commands::PullRequestMerge do
     end
   end
 end
+
+# rubocop:enable Metrics/BlockLength

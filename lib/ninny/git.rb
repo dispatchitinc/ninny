@@ -1,16 +1,18 @@
 # frozen_string_literal: true
 
 module Ninny
+  # rubocop:disable Metrics/ClassLength
   class Git
     extend Forwardable
-    NO_BRANCH = "(no branch)"
-    DEFAULT_DIRTY_MESSAGE = "Your Git index is not clean. Commit, stash, or otherwise clean up the index before continuing."
-    DIRTY_CONFIRM_MESSAGE = "Your Git index is not clean. Do you want to continue?"
+    NO_BRANCH = '(no branch)'
+    DEFAULT_DIRTY_MESSAGE = 'Your Git index is not clean. Commit, stash, or otherwise clean' \
+                            ' up the index before continuing.'
+    DIRTY_CONFIRM_MESSAGE = 'Your Git index is not clean. Do you want to continue?'
 
     # branch prefixes
-    DEPLOYABLE_PREFIX = "deployable"
-    STAGING_PREFIX = "staging"
-    QAREADY_PREFIX = "qaready"
+    DEPLOYABLE_PREFIX = 'deployable'
+    STAGING_PREFIX = 'staging'
+    QAREADY_PREFIX = 'qaready'
 
     def_delegators :git, :branch
 
@@ -29,12 +31,9 @@ module Ninny
     end
 
     def current_branch_name
-      name = git.current_branch
-      if name == NO_BRANCH
-        raise NotOnBranch, "Not currently checked out to a particular branch"
-      else
-        name
-      end
+      raise NotOnBranch, 'Not currently checked out to a particular branch' if git.current_branch == NO_BRANCH
+
+      git.current_branch
     end
 
     def merge(branch_name)
@@ -42,6 +41,7 @@ module Ninny
         git.fetch
         command 'merge', ['--no-ff', "origin/#{branch_name}"]
         raise MergeFailed unless clean?
+
         push
       end
     end
@@ -64,23 +64,20 @@ module Ninny
     #
     # branch_name - The name of the branch to check out
     # do_after_pull - Should a pull be done after checkout?
-    def check_out(branch, do_after_pull=true)
+    def check_out(branch, do_after_pull = true)
       git.fetch
       branch.checkout
       pull if do_after_pull
-      unless current_branch.name == branch.name
-        raise CheckoutFailed, "Failed to check out '#{branch}'"
-      end
+      raise CheckoutFailed, "Failed to check out '#{branch}'" unless current_branch.name == branch.name
     end
 
     # Public: Track remote branch matching current branch
     #
     # do_after_pull - Should a pull be done after tracking?
-    def track_current_branch(do_after_pull=true)
+    def track_current_branch(do_after_pull = true)
       command('branch', ['-u', "origin/#{current_branch_name}"])
       pull if do_after_pull
     end
-
 
     # Public: Create a new branch from the given source
     #
@@ -108,7 +105,7 @@ module Ninny
     # Returns an Array of Strings containing the branch names
     def remote_branches
       git.fetch
-      git.branches.remote.map{ |branch| git.branch(branch.name) }.sort_by(&:name)
+      git.branches.remote.map { |branch| git.branch(branch.name) }.sort_by(&:name)
     end
 
     # Public: List of branches starting with the given string
@@ -131,7 +128,6 @@ module Ninny
       branches_for(prefix).last || raise(NoBranchOfType, "No #{prefix} branch")
     end
 
-
     # Public: Whether the Git index is clean (has no uncommited changes)
     #
     # Returns a Boolean
@@ -140,7 +136,7 @@ module Ninny
     end
 
     # Public: Perform the block if the Git index is clean
-    def if_clean(message=DEFAULT_DIRTY_MESSAGE)
+    def if_clean(message = DEFAULT_DIRTY_MESSAGE)
       if clean? || prompt.yes?(DIRTY_CONFIRM_MESSAGE)
         yield
       else
@@ -151,9 +147,9 @@ module Ninny
 
     # Public: Display the message and show the git status
     def alert_dirty_index(message)
-      prompt.say " "
+      prompt.say ' '
       prompt.say message
-      prompt.say " "
+      prompt.say ' '
       prompt.say command('status')
       raise DirtyIndex
     end
@@ -163,11 +159,11 @@ module Ninny
       TTY::Prompt.new(options)
     end
 
-
     # Exceptions
     CheckoutFailed = Class.new(StandardError)
     NotOnBranch = Class.new(StandardError)
     NoBranchOfType = Class.new(StandardError)
     DirtyIndex = Class.new(StandardError)
   end
+  # rubocop:enable Metrics/ClassLength
 end

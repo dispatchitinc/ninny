@@ -1,7 +1,9 @@
+# frozen_string_literal: true
+
 require 'ninny/commands/stage_up'
 
 RSpec.describe Ninny::Commands::StageUp do
-  it "executes `stage_up` command successfully" do
+  it 'executes `stage_up` command successfully' do
     output = StringIO.new
     pull_request_id = 1
     options = {}

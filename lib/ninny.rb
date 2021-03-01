@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'forwardable'
 require 'ninny/git'
 require 'ninny/command'
@@ -13,15 +15,15 @@ require 'ninny/repository/pull_request'
 require 'ninny/project_config'
 require 'ninny/user_config'
 
-
 require 'git'
 require 'gitlab'
 require 'tty-config'
 
 module Ninny
   class Error < StandardError; end
+
   def self.project_config
-    @config ||= ProjectConfig.config
+    @project_config ||= ProjectConfig.config
   end
 
   def self.user_config

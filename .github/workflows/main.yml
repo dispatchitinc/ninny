@@ -6,7 +6,7 @@ on:
     branches: [ main ]
 
 jobs:
-  default:
+  test:
     runs-on: ubuntu-latest
     strategy:
       fail-fast: false
@@ -22,3 +22,13 @@ jobs:
         bundler: 1.17.3
         bundler-cache: true
     - run: bundle exec rake
+  pronto:
+    if: github.EVENT_NAME == 'pull_request'
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v2
+      with:
+        fetch-depth: 0
+    - uses: HeRoMo/pronto-action@v1.13.0
+      with:
+        github_token: ${{ secrets.GITHUB_TOKEN }}

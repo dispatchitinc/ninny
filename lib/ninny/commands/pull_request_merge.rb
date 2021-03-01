@@ -14,11 +14,12 @@ module Ninny
         self.options = options
       end
 
-      def execute(input: $stdin, output: $stdout)
-        if (!pull_request_id)
+      def execute(*)
+        unless pull_request_id
           current = Ninny.repo.current_pull_request
           self.pull_request_id = current.number if current
         end
+
         self.pull_request_id ||= select_pull_request
 
         check_out_branch
@@ -26,12 +27,13 @@ module Ninny
         comment_about_merge
       end
 
-      private def select_pull_request
+      def select_pull_request
         choices = Ninny.repo.open_pull_requests.map { |pr| { name: pr.title, value: pr.number } }
         prompt.select("Which #{Ninny.repo.pull_request_label}?", choices)
       end
+      private :select_pull_request
 
-     # Public: Check out the branch
+      # Public: Check out the branch
       def check_out_branch
         Ninny.git.check_out(branch_to_merge_into, false)
         Ninny.git.track_current_branch
@@ -60,9 +62,11 @@ module Ninny
       # Public: Find the pull request
       #
       # Returns a Ninny::Repository::PullRequest
+      # rubocop:disable Lint/DuplicateMethods
       def pull_request
         @pull_request ||= Ninny.repo.pull_request(pull_request_id)
       end
+      # rubocop:enable Lint/DuplicateMethods
 
       # Public: Find the branch
       #
