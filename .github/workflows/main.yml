@@ -29,8 +29,11 @@ jobs:
     - uses: actions/checkout@v2
       with:
         fetch-depth: 0
-    - run: gem install pronto pronto-rubocop
-    - run: pronto run -f github_status github_pr -c origin/${{ github.BASE_REF }}
-      env:
-        PRONTO_PULL_REQUEST_ID: ${{ github.EVENT.PULL_REQUEST.NUMBER }}
-        PRONTO_GITHUB_ACCESS_TOKEN: "${{ github.PRONTO_TOKEN }}"
+    - uses: HeRoMo/pronto-action@v1.13.0
+      with:
+        github_token: ${{ secrets.GITHUB_TOKEN }}
+    # - run: gem install pronto pronto-rubocop
+    # - run: pronto run -f github_status github_pr -c origin/${{ github.BASE_REF }}
+    #   env:
+    #     PRONTO_PULL_REQUEST_ID: ${{ github.EVENT.PULL_REQUEST.NUMBER }}
+    #     PRONTO_GITHUB_ACCESS_TOKEN: "${{ github.PRONTO_TOKEN }}"
