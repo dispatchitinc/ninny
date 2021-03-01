@@ -4,7 +4,6 @@ require_relative '../command'
 
 module Ninny
   module Commands
-    # A class to return the current dated branch
     class OutputDatedBranch < Ninny::Command
       attr_reader :branch_type
 

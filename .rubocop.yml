@@ -1,0 +1,18 @@
+AllCops:
+  NewCops: enable
+  SuggestExtensions: false
+  TargetRubyVersion: 2.7
+  Exclude:
+    - vendor/**/*
+
+Gemspec/RequiredRubyVersion:
+  Enabled: false
+
+Style/Documentation:
+  Enabled: false
+
+Lint/EmptyClass:
+  Enabled: false
+
+Lint/EmptyBlock:
+  Enabled: false

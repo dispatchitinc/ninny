@@ -19,7 +19,6 @@ require 'git'
 require 'gitlab'
 require 'tty-config'
 
-# The core Ninny module
 module Ninny
   class Error < StandardError; end
 

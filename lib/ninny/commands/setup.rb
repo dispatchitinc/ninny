@@ -4,7 +4,6 @@ require_relative '../command'
 
 module Ninny
   module Commands
-    # A command to set up the ninny config file
     class Setup < Ninny::Command
       attr_reader :config
 

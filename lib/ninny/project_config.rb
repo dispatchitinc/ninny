@@ -1,7 +1,6 @@
 # frozen_string_literal: true
 
 module Ninny
-  # The project configuration
   class ProjectConfig
     attr_reader :config
 

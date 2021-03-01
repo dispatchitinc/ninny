@@ -1,7 +1,6 @@
 # frozen_string_literal: true
 
 module Ninny
-  # The user configuration
   class UserConfig
     attr_reader :config
 

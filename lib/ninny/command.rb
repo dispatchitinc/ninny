@@ -1,7 +1,6 @@
 # frozen_string_literal: true
 
 module Ninny
-  # Any ninny command
   class Command
     extend Forwardable
 

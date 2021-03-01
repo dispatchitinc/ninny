@@ -20,8 +20,7 @@ RSpec.configure do |config|
   end
 end
 
-class GitStub
-end
+class GitStub; end
 
 module Git
   def self.open(*_args)
@@ -29,8 +28,7 @@ module Git
   end
 end
 
-class GitlabStub
-end
+class GitlabStub; end
 
 module Gitlab
   def self.client(*_args)

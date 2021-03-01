@@ -2,7 +2,6 @@
 
 module Ninny
   # rubocop:disable Metrics/ClassLength
-  # The git client
   class Git
     extend Forwardable
     NO_BRANCH = '(no branch)'

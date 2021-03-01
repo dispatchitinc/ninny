@@ -5,7 +5,6 @@ require_relative 'pull_request_merge'
 
 module Ninny
   module Commands
-    # A command which stages up a pull request by merging into the current staging branch
     class StageUp < PullRequestMerge
       def initialize(pull_request_id, options)
         super

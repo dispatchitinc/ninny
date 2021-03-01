@@ -2,7 +2,6 @@
 
 module Ninny
   module Repository
-    # The GitLab client object
     class Gitlab
       attr_reader :gitlab, :project_id
 

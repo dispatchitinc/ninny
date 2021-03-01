@@ -4,7 +4,6 @@ require_relative '../command'
 
 module Ninny
   module Commands
-    # A class to merge a pull request
     class PullRequestMerge < Ninny::Command
       attr_accessor :pull_request_id, :options, :pull_request
       attr_reader :branch_type
@@ -14,7 +13,6 @@ module Ninny
         @branch_type = options[:branch_type] || Ninny::Git::STAGING_PREFIX
         self.pull_request_id = pull_request_id
         self.options = options
-        self.pull_request = pull_request
       end
       # rubocop:enable Lint/MissingSuper
 
@@ -66,9 +64,11 @@ module Ninny
       # Public: Find the pull request
       #
       # Returns a Ninny::Repository::PullRequest
+      # rubocop:disable Lint/DuplicateMethods
       def pull_request
         @pull_request ||= Ninny.repo.pull_request(pull_request_id)
       end
+      # rubocop:enable Lint/DuplicateMethods
 
       # Public: Find the branch
       #

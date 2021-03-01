@@ -2,7 +2,6 @@
 
 module Ninny
   module Commands
-    # A class to specifically create a new staging branch with a datestamp
     class NewStaging < CreateDatedBranch
       def initialize(options)
         super

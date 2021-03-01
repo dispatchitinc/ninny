@@ -2,7 +2,6 @@
 
 module Ninny
   module Commands
-    # Class to create any branch with a datestamp in it
     class CreateDatedBranch < Ninny::Command
       attr_reader :branch_type, :should_delete_old_branches
 

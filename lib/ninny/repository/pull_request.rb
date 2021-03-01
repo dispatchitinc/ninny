@@ -2,7 +2,6 @@
 
 module Ninny
   module Repository
-    # The pull request object
     class PullRequest
       attr_accessor :number, :title, :description, :branch, :comment_lambda
 
