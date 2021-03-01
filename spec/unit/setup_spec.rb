@@ -13,7 +13,7 @@ RSpec.describe Ninny::Commands::Setup do
 
     subject.execute(output: output)
 
-    expect(output.string).to eq("User config \n")
+    expect(output.string).to eq("User config !\n")
   end
 
   context '#try_reading_user_config' do

@@ -20,5 +20,8 @@ Lint/EmptyBlock:
 Lint/MissingSuper:
   Enabled: false
 
+Metrics/MethodLength:
+  Max: 15
+
 Style/OptionalBooleanParameter:
   Enabled: false

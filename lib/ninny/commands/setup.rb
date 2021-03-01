@@ -15,11 +15,20 @@ module Ninny
       def execute(output: $stdout)
         try_reading_user_config
 
-        prompt_for_gitlab_private_token
+        private_token = prompt_for_gitlab_private_token
 
-        config.write(force: true)
-        # Command logic goes here ...
-        output.puts "User config #{@result}"
+        begin
+          # TODO: This only works with thor gem < 2. So, we need to make this work when TTY
+          #   releases versions compatible with thor >= 2 as well as < 2
+          config.write(force: true)
+        rescue StandardError
+          puts '  Unable to update your ~/.ninny.yml file via TTY... continuing...'
+          File.open("#{ENV['HOME']}/.ninny.yml", 'w') do |file|
+            file.puts "gitlab_private_token: #{private_token}"
+          end
+        end
+
+        output.puts "User config #{@result}!"
       end
 
       def try_reading_user_config
@@ -39,7 +48,16 @@ module Ninny
         return unless prompt.yes?("Do you have a#{new_token_text} GitLab private token?")
 
         private_token = prompt.ask('Enter private token:', required: true)
-        config.set(:gitlab_private_token, value: private_token)
+
+        begin
+          # TODO: This only works with thor gem < 2. So, we need to make this work when TTY
+          #   releases versions compatible with thor >= 2 as well as < 2
+          config.set(:gitlab_private_token, value: private_token)
+        rescue ArgumentError
+          puts '  Unable to set new token via TTY... continuing...'
+        end
+
+        private_token
       end
     end
   end
