@@ -48,7 +48,7 @@ module Ninny
           comment_lambda: ->(body) { Ninny.repo.create_merge_request_note(request.iid, body) }
         )
       end
-      private_class_method :to_pr
+      private :to_pr
     end
   end
 end

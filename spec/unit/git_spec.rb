@@ -27,7 +27,7 @@ RSpec.describe Ninny::Git do
 
   context '#current_branch' do
     it 'should return current_branch from git' do
-      expect(subject.git).to receive(:current_branch).and_return('main')
+      expect(subject.git).to receive(:current_branch).at_least(:once).and_return('main')
       expect(subject.git).to receive(:branch).with('main')
       subject.current_branch
     end

@@ -9,13 +9,14 @@ module Ninny
       attr_accessor :pull_request_id, :options, :pull_request
       attr_reader :branch_type
 
+      # rubocop:disable Lint/MissingSuper
       def initialize(pull_request_id, options)
-        super
         @branch_type = options[:branch_type] || Ninny::Git::STAGING_PREFIX
         self.pull_request_id = pull_request_id
         self.options = options
-        self.pull_request = Ninny.repo.pull_request(pull_request_id)
+        self.pull_request = pull_request
       end
+      # rubocop:enable Lint/MissingSuper
 
       def execute(*)
         unless pull_request_id
@@ -34,7 +35,7 @@ module Ninny
         choices = Ninny.repo.open_pull_requests.map { |pr| { name: pr.title, value: pr.number } }
         prompt.select("Which #{Ninny.repo.pull_request_label}?", choices)
       end
-      private_class_method :select_pull_request
+      private :select_pull_request
 
       # Public: Check out the branch
       def check_out_branch
@@ -60,6 +61,13 @@ module Ninny
       # Returns a String
       def comment_body
         "Merged into #{branch_to_merge_into}."
+      end
+
+      # Public: Find the pull request
+      #
+      # Returns a Ninny::Repository::PullRequest
+      def pull_request
+        @pull_request ||= Ninny.repo.pull_request(pull_request_id)
       end
 
       # Public: Find the branch

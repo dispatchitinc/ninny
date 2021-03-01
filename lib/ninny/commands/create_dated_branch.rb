@@ -6,11 +6,12 @@ module Ninny
     class CreateDatedBranch < Ninny::Command
       attr_reader :branch_type, :should_delete_old_branches
 
+      # rubocop:disable Lint/MissingSuper
       def initialize(options)
-        super
         @branch_type = options[:branch_type] || Git::STAGING_PREFIX
         @should_delete_old_branches = options[:delete_old_branches]
       end
+      # rubocop:enable Lint/MissingSuper
 
       def execute(output: $stdout)
         create_branch

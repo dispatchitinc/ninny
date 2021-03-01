@@ -8,11 +8,12 @@ module Ninny
     class Setup < Ninny::Command
       attr_reader :config
 
+      # rubocop:disable Lint/MissingSuper
       def initialize(options)
-        super
         @options = options
         @config = Ninny.user_config
       end
+      # rubocop:enable Lint/MissingSuper
 
       def execute(output: $stdout)
         try_reading_user_config
@@ -38,7 +39,7 @@ module Ninny
           new_token_text = 'new'
         end
 
-        return unless prompt.yes?("Do you have a#{new_token_text} gitlab private token?")
+        return unless prompt.yes?("Do you have a#{new_token_text} GitLab private token?")
 
         private_token = prompt.ask('Enter private token', required: true)
         config.set(:gitlab_private_token, value: private_token)
