@@ -2,14 +2,17 @@
 
 module Ninny
   module Commands
+    # Class to create any branch with a datestamp in it
     class CreateDatedBranch < Ninny::Command
       attr_reader :branch_type, :should_delete_old_branches
+
       def initialize(options)
+        super
         @branch_type = options[:branch_type] || Git::STAGING_PREFIX
         @should_delete_old_branches = options[:delete_old_branches]
       end
 
-      def execute(input: $stdin, output: $stdout)
+      def execute(output: $stdout)
         create_branch
         delete_old_branches
         output.puts "#{branch_name} created"
@@ -22,7 +25,7 @@ module Ninny
 
       # Public: The date suffix to append to the branch name
       def date_suffix
-        Date.today.strftime("%Y.%m.%d")
+        Date.today.strftime('%Y.%m.%d')
       end
 
       # Public: The name of the branch to create
@@ -35,12 +38,15 @@ module Ninny
       # Public: If necessary, and if user opts to, delete old branches of its type
       def delete_old_branches
         return unless extra_branches.any?
-        should_delete = should_delete_old_branches || prompt.yes?("Do you want to delete the old #{branch_type} branch(es)? (#{extra_branches.join(", ")})")
 
-        if should_delete
-          extra_branches.each do |extra|
-            Ninny.git.delete_branch(extra)
-          end
+        should_delete = should_delete_old_branches || prompt.yes?(
+          "Do you want to delete the old #{branch_type} branch(es)? (#{extra_branches.join(', ')})"
+        )
+
+        return unless should_delete
+
+        extra_branches.each do |extra|
+          Ninny.git.delete_branch(extra)
         end
       end
 
@@ -49,11 +55,11 @@ module Ninny
       # Returns an Array of Strings of the branch names
       def extra_branches
         with_branch_type do
-          Ninny.git.branches_for(branch_type).select{ |branch| branch.name != branch_name }
+          Ninny.git.branches_for(branch_type).reject { |branch| branch.name == branch_name }
         end
       end
 
-      def with_branch_type(&block)
+      def with_branch_type
         case branch_type
         when Git::DEPLOYABLE_PREFIX, Git::STAGING_PREFIX, Git::QAREADY_PREFIX
           yield

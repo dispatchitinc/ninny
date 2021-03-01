@@ -1,13 +1,15 @@
-require "bundler/setup"
+# frozen_string_literal: true
+
+require 'bundler/setup'
 require 'byebug'
-require "ninny"
+require 'ninny'
 require 'tty-config'
 
 RSpec.configure do |config|
   # Enable flags like --only-failures and --next-failure
-  config.example_status_persistence_file_path = ".rspec_status"
+  config.example_status_persistence_file_path = '.rspec_status'
 
-  config.filter_run :focus => true
+  config.filter_run focus: true
   config.run_all_when_everything_filtered = true
 
   # Disable RSpec exposing methods globally on `Module` and `main`
@@ -22,7 +24,7 @@ class GitStub
 end
 
 module Git
-  def self.open(*args)
+  def self.open(*_args)
     GitStub.new
   end
 end
@@ -31,7 +33,7 @@ class GitlabStub
 end
 
 module Gitlab
-  def self.client(*args)
+  def self.client(*_args)
     GitlabStub.new
   end
 end
@@ -42,7 +44,8 @@ module Ninny
   end
 end
 
-class TTY::Config
-  def write(*args)
+module TTY
+  class Config
+    def write(*args); end
   end
 end
