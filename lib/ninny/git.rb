@@ -64,7 +64,7 @@ module Ninny
     #
     # branch_name - The name of the branch to check out
     # do_after_pull - Should a pull be done after checkout?
-    def check_out(branch, do_after_pull: true)
+    def check_out(branch, do_after_pull = true)
       git.fetch
       branch.checkout
       pull if do_after_pull
@@ -74,7 +74,7 @@ module Ninny
     # Public: Track remote branch matching current branch
     #
     # do_after_pull - Should a pull be done after tracking?
-    def track_current_branch(do_after_pull: true)
+    def track_current_branch(do_after_pull = true)
       command('branch', ['-u', "origin/#{current_branch_name}"])
       pull if do_after_pull
     end

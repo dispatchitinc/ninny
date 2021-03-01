@@ -19,3 +19,6 @@ Lint/EmptyBlock:
 
 Lint/MissingSuper:
   Enabled: false
+
+Style/OptionalBooleanParameter:
+  Enabled: false
