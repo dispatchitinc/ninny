@@ -22,7 +22,7 @@ module Ninny
           #   releases versions compatible with thor >= 2 as well as < 2
           config.write(force: true)
         rescue StandardError
-          puts '  Unable to update your ~/.ninny.yml file via TTY... continuing...'
+          puts '  Unable to write config file via TTY... continuing anyway...'
           File.open("#{ENV['HOME']}/.ninny.yml", 'w') do |file|
             file.puts "gitlab_private_token: #{private_token}"
           end
@@ -54,7 +54,7 @@ module Ninny
           #   releases versions compatible with thor >= 2 as well as < 2
           config.set(:gitlab_private_token, value: private_token)
         rescue ArgumentError
-          puts '  Unable to set new token via TTY... continuing...'
+          puts '  Unable to set new token via TTY... continuing anyway...'
         end
 
         private_token

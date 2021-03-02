@@ -65,7 +65,9 @@ RSpec.describe Ninny::Commands::Setup do
     context 'when unable to set via TTY' do
       it 'should move on anyway' do
         allow(Ninny.user_config).to receive(:gitlab_private_token)
-        allow_any_instance_of(TTY::Prompt).to receive(:yes?).with('Do you have a GitLab private token?').and_return(true)
+        allow_any_instance_of(TTY::Prompt).to receive(:yes?).with(
+          'Do you have a GitLab private token?'
+        ).and_return(true)
         allow_any_instance_of(TTY::Prompt).to receive(:ask).with(
           'Enter private token:',
           required: true
@@ -76,7 +78,9 @@ RSpec.describe Ninny::Commands::Setup do
 
       it 'should return the private token' do
         allow(Ninny.user_config).to receive(:gitlab_private_token)
-        allow_any_instance_of(TTY::Prompt).to receive(:yes?).with('Do you have a GitLab private token?').and_return(true)
+        allow_any_instance_of(TTY::Prompt).to receive(:yes?).with(
+          'Do you have a GitLab private token?'
+        ).and_return(true)
         allow_any_instance_of(TTY::Prompt).to receive(:ask).with(
           'Enter private token:',
           required: true
