@@ -18,8 +18,8 @@ module Ninny
         private_token = prompt_for_gitlab_private_token
 
         begin
-          # TODO: This only works with thor gem < 2. So, we need to make this work when TTY
-          #   releases versions compatible with thor >= 2 as well as < 2
+          # TODO: This only works with thor gem < 1. So, we need to make this work when TTY
+          #   releases versions compatible with thor versions >= 1 as well.
           config.write(force: true)
         rescue StandardError
           puts '  Unable to write config file via TTY... continuing anyway...'
@@ -50,8 +50,8 @@ module Ninny
         private_token = prompt.ask('Enter private token:', required: true)
 
         begin
-          # TODO: This only works with thor gem < 2. So, we need to make this work when TTY
-          #   releases versions compatible with thor >= 2 as well as < 2
+          # TODO: This only works with thor gem < 1. So, we need to make this work when TTY
+          #   releases versions compatible with thor versions >= 1 as well.
           config.set(:gitlab_private_token, value: private_token)
         rescue ArgumentError
           puts '  Unable to set new token via TTY... continuing anyway...'
