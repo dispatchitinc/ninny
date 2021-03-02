@@ -35,6 +35,7 @@ module Ninny
 
       # Public: Check out the branch
       def check_out_branch
+        prompt.say "Checking out #{branch_to_merge_into}."
         Ninny.git.check_out(branch_to_merge_into, false)
         Ninny.git.track_current_branch
       rescue Ninny::Git::NoBranchOfType
@@ -44,6 +45,7 @@ module Ninny
 
       # Public: Merge the pull request's branch into the checked-out branch
       def merge_pull_request
+        prompt.say "Merging #{pull_request.branch} to #{branch_to_merge_into}."
         Ninny.git.merge(pull_request.branch)
       end
 
