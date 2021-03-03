@@ -40,6 +40,8 @@ RSpec.describe Ninny::Commands::PullRequestMerge do
 
   context '#merge_pull_request' do
     it 'should call merge between the branches' do
+      allow_any_instance_of(TTY::Prompt).to receive(:say).with('Merging pr_branch_name to staging-branch.')
+      allow(subject).to receive(:branch_to_merge_into).and_return('staging-branch')
       pr = double(:pull_request, branch: 'pr_branch_name')
       allow(subject).to receive(:pull_request).and_return(pr)
       expect(Ninny.git).to receive(:merge).with('pr_branch_name')
