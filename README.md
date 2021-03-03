@@ -83,7 +83,7 @@ At any point, `ninny help` will show the help screen.
     * Run `bundle exec guard` to run tests continuously as you develop
 6. Test the gem locally
     * Run `gem build *.gemspec` to build the gem locally
-    * Run `gem install --local ninny-x.x.x.gem` to install the gem locally
+    * Run `gem install --local ninny-X.X.X.gem` to install the gem locally
 7. Make a pull request back to this repository
 
 ### Releasing
