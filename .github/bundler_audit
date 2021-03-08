@@ -11,8 +11,8 @@ notify_slack() {
   echo "Message sent to Slack"
 }
 
-gem install bundler
-bundle install
+gem install bundler -v 1.17.3
+bundle _1.17.3_ install
 gem install bundler-audit
 bundler-audit update
 bundler-audit
