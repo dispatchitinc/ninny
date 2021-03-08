@@ -1,0 +1,49 @@
+name: Scheduled
+on:
+  schedule:
+    - cron: "0 4 * * 1" # 4am UTC on Mondays (10pm/11pm CT on Sundays)
+
+jobs:
+  bundler-audit:
+    if:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v2
+      with:
+        fetch-depth: 0
+    - uses: ruby/setup-ruby@v1
+      with:
+        ruby-version: 2.7.2
+        bundler: 1.17.3
+        bundler-cache: true
+    - run: |
+        gem install bundler-audit
+        bundler-audit update
+        bundler-audit
+
+        if [ $? -eq 0 ]; then
+          echo "No vulnerabilities found."
+        else
+          echo "Gem vulnerabilities found!"
+          exit 1
+        fi
+  bundle-outdated:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v2
+      with:
+        fetch-depth: 0
+    - uses: ruby/setup-ruby@v1
+      with:
+        ruby-version: 2.7.2
+        bundler: 1.17.3
+        bundler-cache: true
+    - run: |
+        bundle outdated --strict
+
+        if [ $? -eq 0 ]; then
+          echo "No outdated gems found."
+        else
+          echo "Outdated gems found!"
+          exit 1
+        fi
