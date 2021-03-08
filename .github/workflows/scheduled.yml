@@ -1,0 +1,25 @@
+name: Scheduled
+on:
+  schedule:
+    - cron: "0 4 * * 1" # 4am UTC on Mondays (10pm/11pm CT on Sundays)
+  # These are for temporary testing
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+
+
+jobs:
+  bundler-audit:
+    if:
+    runs-on: ubuntu-latest
+    steps:
+    - run: ./.github/bundler_audit \
+        ${{ github.REPOSITORY }} ${{ github.RUN_ID }} \
+        ${{ secrets.SLACK_ALERTS_CHANNEL }} ${{ secrets.SLACK_WEBHOOK_URL }}
+  bundle-outdated:
+    runs-on: ubuntu-latest
+    steps:
+    - run: ./.github/bundle_outdated \
+        ${{ github.REPOSITORY }} ${{ github.RUN_ID }} \
+        ${{ secrets.SLACK_ALERTS_CHANNEL }} ${{ secrets.SLACK_WEBHOOK_URL }}

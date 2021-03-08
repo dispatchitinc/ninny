@@ -1,0 +1,23 @@
+#!/bin/bash
+
+run_url=https://github.com/$1/actions/runs/$2
+slack_alerts_channel=$3
+slack_webhook_url=$4
+
+notify_slack() {
+  curl -s -d "{ \"channel\": \"$slack_alerts_channel\", \"text\": \"$1\" }" -H "Content-Type: application/json" -X POST "$slack_webhook_url"
+  echo "Message sent to Slack"
+}
+
+gem install bundler -v $(cat Gemfile.lock | tail -1 | tr -d " ")
+gem install bundler-audit
+bundler-audit update
+bundler-audit
+
+if [ $? -eq 0 ]; then
+  echo "No vulnerabilities found."
+else
+  echo "Gem vulnerabilities found. Check GitHub for details: $run_url"
+  notify_slack "Gem vulnerabilities found. Check GitHub for details: $run_url"
+  exit 1
+fi
