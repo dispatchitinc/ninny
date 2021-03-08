@@ -13,12 +13,18 @@ jobs:
     if:
     runs-on: ubuntu-latest
     steps:
+    - uses: actions/checkout@v2
+      with:
+        fetch-depth: 0
     - run: bash .github/bundler_audit \
         ${{ github.REPOSITORY }} ${{ github.RUN_ID }} \
         ${{ secrets.SLACK_ALERTS_CHANNEL }} ${{ secrets.SLACK_WEBHOOK_URL }}
   bundle-outdated:
     runs-on: ubuntu-latest
     steps:
+    - uses: actions/checkout@v2
+      with:
+        fetch-depth: 0
     - run: bash .github/bundle_outdated \
         ${{ github.REPOSITORY }} ${{ github.RUN_ID }} \
         ${{ secrets.SLACK_ALERTS_CHANNEL }} ${{ secrets.SLACK_WEBHOOK_URL }}
