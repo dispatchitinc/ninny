@@ -2,10 +2,6 @@ name: Scheduled
 on:
   schedule:
     - cron: "0 4 * * 1" # 4am UTC on Mondays (10pm/11pm CT on Sundays)
-  push:
-    branches: [ main ]
-  pull_request:
-    branches: [ main ]
 
 jobs:
   bundler-audit:
