@@ -11,7 +11,8 @@ notify_slack() {
   echo "Message sent to Slack"
 }
 
-gem install bundler -v $(cat Gemfile.lock | tail -1 | tr -d " ")
+gem install bundler
+bundle install
 bundle outdated --strict
 
 if [ $? -eq 0 ]; then
