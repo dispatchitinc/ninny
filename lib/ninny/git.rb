@@ -66,7 +66,7 @@ module Ninny
     # do_after_pull - Should a pull be done after checkout?
     def check_out(branch, do_after_pull = true)
       git.fetch
-      branch.checkout
+      git.checkout(branch)
       pull if do_after_pull
       raise CheckoutFailed, "Failed to check out '#{branch}'" unless current_branch.name == branch.name
     end
