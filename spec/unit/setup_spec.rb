@@ -11,7 +11,7 @@ RSpec.describe Ninny::Commands::Setup do
     expect(subject).to receive(:try_reading_user_config)
     expect(subject).to receive(:prompt_for_gitlab_private_token).and_return(:token)
     expect(Ninny.user_config).to receive(:set).with(:gitlab_private_token, value: :token)
-    expect(subject).to receive(:write_gitlab_private_token).with(:token)
+    expect(subject).to receive(:write_gitlab_private_token).with(:token, :success)
     output = StringIO.new
     subject.execute(output: output)
     expect(output.string).to eq("User config !\n")
@@ -29,7 +29,7 @@ RSpec.describe Ninny::Commands::Setup do
     subject = Ninny::Commands::Setup.new({ token: :token })
     expect(subject).to receive(:try_reading_user_config)
     expect(subject).not_to receive(:prompt_for_gitlab_private_token)
-    expect(Ninny.user_config).not_to receive(:set)
+    expect(Ninny.user_config).to receive(:set)
     expect(subject).to receive(:write_gitlab_private_token)
     output = StringIO.new
     subject.execute(output: output)
