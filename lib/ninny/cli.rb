@@ -60,7 +60,7 @@ module Ninny
         invoke :help, ['setup']
       else
         require_relative 'commands/setup'
-        Ninny::Commands::Setup.new(options.merge(token: options[:token])).execute
+        Ninny::Commands::Setup.new(options).execute
       end
     end
   end
