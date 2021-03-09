@@ -24,7 +24,7 @@ module Ninny
             return
           end
 
-          set_gitlab_private_token(private_token)
+          config_set_gitlab_private_token(private_token)
         end
 
         write_gitlab_private_token(private_token)
@@ -38,7 +38,7 @@ module Ninny
         @result = 'created'
       end
 
-      def set_gitlab_private_token(private_token)
+      def config_set_gitlab_private_token(private_token)
         # TODO: This only works with thor gem < 1. So, we need to make this work when TTY
         #   releases versions compatible with thor versions >= 1 as well.
         config.set(:gitlab_private_token, value: private_token)
