@@ -54,12 +54,13 @@ module Ninny
 
     desc 'setup', 'Interactively setup configuration'
     method_option :help, aliases: '-h', type: :boolean, desc: 'Display usage information'
+    method_option :token, aliases: '-t', type: :string, desc: 'The GitLab token to add to the ~/.ninny.yml file'
     def setup(*)
       if options[:help]
         invoke :help, ['setup']
       else
         require_relative 'commands/setup'
-        Ninny::Commands::Setup.new(options).execute
+        Ninny::Commands::Setup.new(options.merge(token: options[:token])).execute
       end
     end
   end
