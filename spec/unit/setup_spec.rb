@@ -6,9 +6,31 @@ require 'tty-prompt'
 # rubocop:disable Metrics/BlockLength
 RSpec.describe Ninny::Commands::Setup do
   subject { Ninny::Commands::Setup.new({}) }
+
   it 'executes `setup` command successfully' do
     expect(subject).to receive(:try_reading_user_config)
-    expect(subject).to receive(:prompt_for_gitlab_private_token)
+    expect(subject).to receive(:prompt_for_gitlab_private_token).and_return(:token)
+    expect(Ninny.user_config).to receive(:set).with(:gitlab_private_token, value: :token)
+    expect(subject).to receive(:write_gitlab_private_token).with(:token, :success)
+    output = StringIO.new
+    subject.execute(output: output)
+    expect(output.string).to eq("User config !\n")
+  end
+
+  it 'returns when the user does not give a token' do
+    expect(subject).to receive(:try_reading_user_config)
+    expect(subject).to receive(:prompt_for_gitlab_private_token).and_return(nil)
+    output = StringIO.new
+    subject.execute(output: output)
+    expect(output.string).to eq("Please create a private token on GitLab and then rerun 'ninny setup'.\n")
+  end
+
+  it 'should not ask questions when the token is passed in' do
+    subject = Ninny::Commands::Setup.new({ token: :token })
+    expect(subject).to receive(:try_reading_user_config)
+    expect(subject).not_to receive(:prompt_for_gitlab_private_token)
+    expect(Ninny.user_config).to receive(:set)
+    expect(subject).to receive(:write_gitlab_private_token)
     output = StringIO.new
     subject.execute(output: output)
     expect(output.string).to eq("User config !\n")
@@ -17,7 +39,7 @@ RSpec.describe Ninny::Commands::Setup do
   context 'when unable to write the config file via TTY' do
     it 'should move on and update it anyway' do
       allow(subject).to receive(:try_reading_user_config)
-      allow(subject).to receive(:prompt_for_gitlab_private_token).and_return('yyy')
+      allow(subject).to receive(:prompt_for_gitlab_private_token).and_return(:token)
       allow(Ninny.user_config).to receive(:write).with(force: true).and_raise(StandardError)
       expect(File).to receive(:open).and_return(true)
       subject.execute(output: StringIO.new)
@@ -51,14 +73,13 @@ RSpec.describe Ninny::Commands::Setup do
       subject.prompt_for_gitlab_private_token
     end
 
-    it 'should ask for and set the new token' do
+    it 'should ask for the new token' do
       expect(Ninny.user_config).to receive(:gitlab_private_token)
       expect_any_instance_of(TTY::Prompt).to receive(:yes?).with('Do you have a GitLab private token?').and_return(true)
       expect_any_instance_of(TTY::Prompt).to receive(:ask).with(
         'Enter private token:',
         required: true
-      ).and_return('yyy')
-      expect(Ninny.user_config).to receive(:set).with(:gitlab_private_token, value: 'yyy')
+      ).and_return(:token)
       subject.prompt_for_gitlab_private_token
     end
 
@@ -71,8 +92,8 @@ RSpec.describe Ninny::Commands::Setup do
         allow_any_instance_of(TTY::Prompt).to receive(:ask).with(
           'Enter private token:',
           required: true
-        ).and_return('yyy')
-        allow(Ninny.user_config).to receive(:set).with(:gitlab_private_token, value: 'yyy').and_raise(ArgumentError)
+        ).and_return(:token)
+        allow(Ninny.user_config).to receive(:set).with(:gitlab_private_token, value: :token).and_raise(ArgumentError)
         subject.prompt_for_gitlab_private_token
       end
 
@@ -84,9 +105,9 @@ RSpec.describe Ninny::Commands::Setup do
         allow_any_instance_of(TTY::Prompt).to receive(:ask).with(
           'Enter private token:',
           required: true
-        ).and_return('yyy')
-        allow(Ninny.user_config).to receive(:set).with(:gitlab_private_token, value: 'yyy').and_raise(ArgumentError)
-        expect(subject.prompt_for_gitlab_private_token).to eq('yyy')
+        ).and_return(:token)
+        allow(Ninny.user_config).to receive(:set).with(:gitlab_private_token, value: :token).and_raise(ArgumentError)
+        expect(subject.prompt_for_gitlab_private_token).to eq(:token)
       end
     end
   end

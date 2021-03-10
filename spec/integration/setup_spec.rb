@@ -9,6 +9,7 @@ RSpec.describe '`ninny setup` command', type: :cli do
 
       Options:
         -h, [--help], [--no-help]  # Display usage information
+        -t, [--token=TOKEN]        # The GitLab token to add to the ~/.ninny.yml file
 
       Interactively setup configuration
     OUT

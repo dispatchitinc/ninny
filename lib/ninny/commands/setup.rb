@@ -5,29 +5,28 @@ require_relative '../command'
 module Ninny
   module Commands
     class Setup < Ninny::Command
-      attr_reader :config
+      attr_reader :config, :private_token
 
       def initialize(options)
         @options = options
+        @private_token = options[:token]
         @config = Ninny.user_config
       end
 
       def execute(output: $stdout)
         try_reading_user_config
 
-        private_token = prompt_for_gitlab_private_token
+        unless @private_token
+          @private_token = prompt_for_gitlab_private_token
 
-        begin
-          # TODO: This only works with thor gem < 1. So, we need to make this work when TTY
-          #   releases versions compatible with thor versions >= 1 as well.
-          config.write(force: true)
-        rescue StandardError
-          puts '  Unable to write config file via TTY... continuing anyway...'
-          File.open("#{ENV['HOME']}/.ninny.yml", 'w') do |file|
-            file.puts "gitlab_private_token: #{private_token}"
+          unless @private_token
+            output.puts "Please create a private token on GitLab and then rerun 'ninny setup'."
+            return
           end
         end
 
+        set_response = config_set_gitlab_private_token(@private_token)
+        write_gitlab_private_token(@private_token, set_response)
         output.puts "User config #{@result}!"
       end
 
@@ -36,6 +35,27 @@ module Ninny
         @result = 'updated'
       rescue MissingUserConfig
         @result = 'created'
+      end
+
+      def config_set_gitlab_private_token(private_token)
+        # TODO: This only works with thor gem < 1. So, we need to make this work when TTY
+        #   releases versions compatible with thor versions >= 1 as well.
+        config.set(:gitlab_private_token, value: private_token)
+        :success
+      rescue ArgumentError
+        puts '  Unable to set new token via TTY... continuing anyway...'
+        :failed
+      end
+
+      def write_gitlab_private_token(private_token, set_response)
+        raise StandardError unless set_response == :success
+
+        # TODO: This only works with thor gem < 1. So, we need to make this work when TTY
+        #   releases versions compatible with thor versions >= 1 as well.
+        config.write(force: true)
+      rescue StandardError
+        puts '  Unable to write config file via TTY... continuing anyway...'
+        File.open("#{ENV['HOME']}/.ninny.yml", 'w') { |file| file.puts "gitlab_private_token: #{private_token}" }
       end
 
       def prompt_for_gitlab_private_token
@@ -47,17 +67,7 @@ module Ninny
 
         return unless prompt.yes?("Do you have a#{new_token_text} GitLab private token?")
 
-        private_token = prompt.ask('Enter private token:', required: true)
-
-        begin
-          # TODO: This only works with thor gem < 1. So, we need to make this work when TTY
-          #   releases versions compatible with thor versions >= 1 as well.
-          config.set(:gitlab_private_token, value: private_token)
-        rescue ArgumentError
-          puts '  Unable to set new token via TTY... continuing anyway...'
-        end
-
-        private_token
+        prompt.ask('Enter private token:', required: true)
       end
     end
   end

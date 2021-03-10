@@ -42,9 +42,15 @@ Then, each developer on the project should set up a file at `~/.ninny.yml` on th
 
 ```bash
 $ ninny setup
-Do you have a new GitLab private token? (Y/n) y # enter 'y'
+Do you have a new GitLab private token? (Y/n) Yes # enter 'y'
 Enter private token: abc123def456ghi789jk # enter your private token
-User config updated
+User config updated!
+```
+
+Or, you can pass the private token in as part of the command:
+```bash
+$ ninny setup --token abc123def456ghi789jk # or '-t abc123def456ghi789jk' for short
+User config updated!
 ```
 
 The private token should be a personal access token for that person's GitLab account (generated [here](https://gitlab.com/-/profile/personal_access_tokens)).
