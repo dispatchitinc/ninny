@@ -11,6 +11,10 @@ Gemspec/RequiredRubyVersion:
 Style/Documentation:
   Enabled: false
 
+Layout/LineLength:
+  Exclude:
+    - spec/**/*
+
 Lint/EmptyClass:
   Enabled: false
 
@@ -28,6 +32,9 @@ Metrics/BlockLength:
 
 Metrics/MethodLength:
   Max: 15
+
+Style/AccessModifierDeclarations:
+  EnforcedStyle: inline
 
 Style/BlockDelimiters:
   Enabled: true
