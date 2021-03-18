@@ -20,8 +20,19 @@ Lint/EmptyBlock:
 Lint/MissingSuper:
   Enabled: false
 
+Metrics/BlockLength:
+  Enabled: true
+  Exclude:
+    - spec/**/*
+    - ninny.gemspec
+
 Metrics/MethodLength:
   Max: 15
+
+Style/BlockDelimiters:
+  Enabled: true
+  Exclude:
+    - spec/**/*
 
 Style/OptionalBooleanParameter:
   Enabled: false

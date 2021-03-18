@@ -88,21 +88,14 @@ module Ninny
       remote_branches = command('branch', ['--remote'])
 
       if remote_branches.include?("origin/#{new_branch_name}")
-        if prompt.yes?("The branch #{new_branch_name} already exists. Do you wish to delete and recreate?")
-          delete_branch(new_branch_name)
-          new_branch(new_branch_name, source_branch_name)
-        else
-          exit 1
-        end
+        ask_to_recreate_branch(new_branch_name, source_branch_name)
       else
-        command('branch', ['--no-track', new_branch_name, "origin/#{source_branch_name}"])
-        new_branch = branch(new_branch_name)
-        new_branch.checkout
-        command('push', ['-u', 'origin', new_branch_name])
+        create_branch(new_branch_name, source_branch_name)
       end
     rescue ::Git::GitExecuteError => e
       if e.message.include?(':fatal: A branch named') && e.message.include?(' already exists')
-        puts "The local branch #{new_branch_name} already exists. Please delete it manually and then run this command again."
+        puts "The local branch #{new_branch_name} already exists." \
+          'Please delete it manually and then run this command again.'
         exit 1
       end
     end
@@ -177,6 +170,30 @@ module Ninny
     def prompt(**options)
       require 'tty-prompt'
       TTY::Prompt.new(options)
+    end
+
+    # Private: Ask the user if they wish to delete and recreate a branch
+    #
+    # new_branch_name: the name of the branch in question
+    # source_branch_name: the name of the branch the new branch is supposed to be based off of
+    private def ask_to_recreate_branch(new_branch_name, source_branch_name)
+      if prompt.yes?("The branch #{new_branch_name} already exists. Do you wish to delete and recreate?")
+        delete_branch(new_branch_name)
+        new_branch(new_branch_name, source_branch_name)
+      else
+        exit 1
+      end
+    end
+
+    # Private: Create a branch
+    #
+    # new_branch_name: the name of the branch in question
+    # source_branch_name: the name of the branch the new branch is supposed to be based off of
+    private def create_branch(new_branch_name, source_branch_name)
+      command('branch', ['--no-track', new_branch_name, "origin/#{source_branch_name}"])
+      new_branch = branch(new_branch_name)
+      new_branch.checkout
+      command('push', ['-u', 'origin', new_branch_name])
     end
 
     # Exceptions

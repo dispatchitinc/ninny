@@ -1,7 +1,5 @@
 # frozen_string_literal: true
 
-# rubocop:disable Metrics/BlockLength
-
 RSpec.describe Ninny::Git do
   subject { Ninny::Git.new }
   let(:git_lib) { double(:lib) }
@@ -62,7 +60,10 @@ RSpec.describe Ninny::Git do
         expect(subject).to receive(:command).with('branch', ['--remote']).and_return('')
         expect(subject).to receive(:command).with('branch', ['--no-track', 'new_branch', 'origin/main'])
         expect(subject).to receive(:branch).with('new_branch').and_return(new_branch)
-        expect(subject).to receive(:command).with('push', ['-u', 'origin', 'new_branch']).and_raise(::Git::GitExecuteError.new(':fatal: A branch named new_branch already exists'))
+        expect(subject).to receive(:command).with(
+          'push',
+          ['-u', 'origin', 'new_branch']
+        ).and_raise(::Git::GitExecuteError.new(':fatal: A branch named new_branch already exists'))
         allow(subject).to receive(:exit)
         allow(subject).to receive(:puts)
         subject.new_branch('new_branch', 'main')
@@ -71,7 +72,6 @@ RSpec.describe Ninny::Git do
 
     context 'if the remote branch already exists' do
       it 'should ask the user if they would like to recreate the existing branch' do
-        new_branch = double(:new_branch)
         expect(subject.git).to receive(:fetch)
         expect(subject).to receive(:command).with('branch', ['--remote']).and_return('origin/new_branch')
         allow(subject).to receive(:exit)
@@ -93,7 +93,6 @@ RSpec.describe Ninny::Git do
       end
 
       it 'should exit if the user says no to recreation' do
-        new_branch = double(:new_branch)
         expect(subject.git).to receive(:fetch)
         expect(subject).to receive(:command).with('branch', ['--remote']).and_return('origin/new_branch')
         expect(subject).to receive(:exit)
@@ -122,10 +121,9 @@ RSpec.describe Ninny::Git do
     it 'should catch errors and output a helpful message' do
       expect(subject.git).to receive(:branch).with('delety_branch').and_return(branch_to_delete)
       expect(subject.git).to receive(:push).with('origin', ':branch_to_delete')
-      expect(branch_to_delete).to receive(:delete).and_raise(::Git::GitExecuteError.new(":error: branch #{branch_to_delete} not found"))
+      expect(branch_to_delete).to receive(:delete)
+        .and_raise(::Git::GitExecuteError.new(":error: branch #{branch_to_delete} not found"))
       subject.delete_branch('delety_branch')
     end
   end
 end
-
-# rubocop:enable Metrics/BlockLength

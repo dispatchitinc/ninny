@@ -2,8 +2,6 @@
 
 require 'tty-prompt'
 
-# rubocop:disable Metrics/BlockLength
-
 RSpec.describe Ninny::Commands::NewStaging do
   subject { Ninny::Commands::NewStaging.new(delete_old_branches: true) }
 
@@ -81,5 +79,3 @@ RSpec.describe Ninny::Commands::NewStaging do
     end
   end
 end
-
-# rubocop:enable Metrics/BlockLength

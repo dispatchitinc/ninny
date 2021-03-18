@@ -3,8 +3,6 @@
 require 'ninny/commands/stage_up'
 require 'tty-prompt'
 
-# rubocop:disable Metrics/BlockLength
-
 RSpec.describe Ninny::Commands::PullRequestMerge do
   let(:branch_type) { Ninny::Git::STAGING_PREFIX }
   subject { Ninny::Commands::PullRequestMerge.new(1, {}) }
@@ -73,5 +71,3 @@ RSpec.describe Ninny::Commands::PullRequestMerge do
     end
   end
 end
-
-# rubocop:enable Metrics/BlockLength
