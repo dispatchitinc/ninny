@@ -18,13 +18,13 @@ RSpec.describe Ninny::Commands::NewStaging do
     output = StringIO.new
     subject.execute(output: output)
 
-    expect(output.string).to eq("staging.2019.09.16 created\n")
+    expect(output.string).to eq("Branch staging.2019.09.16 successfully created.\n")
   end
 
   context '#create_branch' do
     it 'should create new branch' do
       allow(Ninny).to receive(:project_config).and_return(double(:config, deploy_branch: 'mainx'))
-      expect(subject).to receive(:branch_name).and_return('staging.2019.09.16')
+      expect(subject).to receive(:branch_name).at_least(:once).and_return('staging.2019.09.16')
       expect(Ninny.git).to receive(:new_branch).with('staging.2019.09.16', 'mainx')
       subject.create_branch
     end

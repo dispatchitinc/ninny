@@ -47,6 +47,7 @@ RSpec.describe Ninny::Git do
       new_branch = double(:new_branch)
       expect(new_branch).to receive(:checkout)
       expect(subject.git).to receive(:fetch)
+      expect(subject).to receive(:command).with('branch', ['--remote']).and_return('')
       expect(subject).to receive(:command).with('branch', ['--no-track', 'new_branch', 'origin/main'])
       expect(subject).to receive(:branch).with('new_branch').and_return(new_branch)
       expect(subject).to receive(:command).with('push', ['-u', 'origin', 'new_branch'])
