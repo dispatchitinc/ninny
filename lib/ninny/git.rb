@@ -95,7 +95,7 @@ module Ninny
     rescue ::Git::GitExecuteError => e
       if e.message.include?(':fatal: A branch named') && e.message.include?(' already exists')
         puts "The local branch #{new_branch_name} already exists." \
-          'Please delete it manually and then run this command again.'
+          ' Please delete it manually and then run this command again.'
         exit 1
       end
     end
