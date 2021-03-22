@@ -3,7 +3,6 @@
 require 'ninny/commands/setup'
 require 'tty-prompt'
 
-# rubocop:disable Metrics/BlockLength
 RSpec.describe Ninny::Commands::Setup do
   subject { Ninny::Commands::Setup.new({}) }
 
@@ -112,4 +111,3 @@ RSpec.describe Ninny::Commands::Setup do
     end
   end
 end
-# rubocop:enable Metrics/BlockLength

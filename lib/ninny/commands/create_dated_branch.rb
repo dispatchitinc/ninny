@@ -13,11 +13,12 @@ module Ninny
       def execute(output: $stdout)
         create_branch
         delete_old_branches
-        output.puts "#{branch_name} created"
+        output.puts "Branch #{branch_name} successfully created."
       end
 
       # Public: Create the desired branch
       def create_branch
+        prompt.say "Attempting to create branch #{branch_name}."
         Ninny.git.new_branch(branch_name, Ninny.project_config.deploy_branch)
       end
 

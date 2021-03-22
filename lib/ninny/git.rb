@@ -38,7 +38,7 @@ module Ninny
 
     def merge(branch_name)
       if_clean do
-        git.fetch
+        git.fetch('-p')
         command 'merge', ['--no-ff', "origin/#{branch_name}"]
         raise MergeFailed unless clean?
 
@@ -65,7 +65,7 @@ module Ninny
     # branch_name - The name of the branch to check out
     # do_after_pull - Should a pull be done after checkout?
     def check_out(branch, do_after_pull = true)
-      git.fetch
+      git.fetch('-p')
       git.checkout(branch)
       pull if do_after_pull
       raise CheckoutFailed, "Failed to check out '#{branch}'" unless current_branch.name == branch.name
@@ -84,11 +84,20 @@ module Ninny
     # new_branch_name - The name of the branch to create
     # source_branch_name - The name of the branch to branch from
     def new_branch(new_branch_name, source_branch_name)
-      git.fetch
-      command('branch', ['--no-track', new_branch_name, "origin/#{source_branch_name}"])
-      new_branch = branch(new_branch_name)
-      new_branch.checkout
-      command('push', ['-u', 'origin', new_branch_name])
+      git.fetch('-p')
+      remote_branches = command('branch', ['--remote'])
+
+      if remote_branches.include?("origin/#{new_branch_name}")
+        ask_to_recreate_branch(new_branch_name, source_branch_name)
+      else
+        create_branch(new_branch_name, source_branch_name)
+      end
+    rescue ::Git::GitExecuteError => e
+      if e.message.include?(':fatal: A branch named') && e.message.include?(' already exists')
+        puts "The local branch #{new_branch_name} already exists." \
+          ' Please delete it manually and then run this command again.'
+        exit 1
+      end
     end
 
     # Public: Delete the given branch
@@ -98,13 +107,17 @@ module Ninny
       branch = branch_name.is_a?(::Git::Branch) ? branch_name : git.branch(branch_name)
       git.push('origin', ":#{branch}")
       branch.delete
+    rescue ::Git::GitExecuteError => e
+      if e.message.include?(':error: branch') && e.message.include?(' not found.')
+        puts 'Could not delete local branch, but the remote branch was deleted.'
+      end
     end
 
     # Public: The list of branches on GitHub
     #
     # Returns an Array of Strings containing the branch names
     def remote_branches
-      git.fetch
+      git.fetch('-p')
       git.branches.remote.map { |branch| git.branch(branch.name) }.sort_by(&:name)
     end
 
@@ -157,6 +170,30 @@ module Ninny
     def prompt(**options)
       require 'tty-prompt'
       TTY::Prompt.new(options)
+    end
+
+    # Private: Ask the user if they wish to delete and recreate a branch
+    #
+    # new_branch_name: the name of the branch in question
+    # source_branch_name: the name of the branch the new branch is supposed to be based off of
+    private def ask_to_recreate_branch(new_branch_name, source_branch_name)
+      if prompt.yes?("The branch #{new_branch_name} already exists. Do you wish to delete and recreate?")
+        delete_branch(new_branch_name)
+        new_branch(new_branch_name, source_branch_name)
+      else
+        exit 1
+      end
+    end
+
+    # Private: Create a branch
+    #
+    # new_branch_name: the name of the branch in question
+    # source_branch_name: the name of the branch the new branch is supposed to be based off of
+    private def create_branch(new_branch_name, source_branch_name)
+      command('branch', ['--no-track', new_branch_name, "origin/#{source_branch_name}"])
+      new_branch = branch(new_branch_name)
+      new_branch.checkout
+      command('push', ['-u', 'origin', new_branch_name])
     end
 
     # Exceptions
