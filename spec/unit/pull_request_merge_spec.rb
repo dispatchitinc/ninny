@@ -17,6 +17,19 @@ RSpec.describe Ninny::Commands::PullRequestMerge do
     subject.execute(output: output)
   end
 
+  context 'when there are no open pull requests' do
+    subject { Ninny::Commands::PullRequestMerge.new(nil, {}) }
+
+    it 'does not attempt to merge' do
+      output = StringIO.new
+
+      allow(Ninny.repo).to receive(:current_pull_request).and_return(nil)
+      allow(subject).to receive(:select_pull_request).and_return(nil)
+      expect(subject).not_to receive(:check_out_branch)
+      subject.execute(output: output)
+    end
+  end
+
   context '#check_out_branch' do
     it 'should check out the branch to merge into' do
       branch = double(:branch)
