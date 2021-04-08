@@ -29,10 +29,10 @@ Gem::Specification.new do |spec|
   spec.add_dependency 'gitlab', '~> 4.11'
   spec.add_dependency 'pastel', '~> 0.8'
   spec.add_dependency 'thor', '< 2'
-  spec.add_dependency 'tty-box', '~> 0.3.0'
+  spec.add_dependency 'tty-box', '~> 0.3'
   spec.add_dependency 'tty-color', '~> 0.4'
-  spec.add_dependency 'tty-command', '~> 0.8.0'
-  spec.add_dependency 'tty-config', '~> 0.3.0'
+  spec.add_dependency 'tty-command', '~> 0.10'
+  spec.add_dependency 'tty-config', '~> 0.3'
   spec.add_dependency 'tty-prompt', '~> 0.23'
 
   spec.add_development_dependency 'bundler', '~> 1.17'
