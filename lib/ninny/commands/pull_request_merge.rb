@@ -22,6 +22,8 @@ module Ninny
 
         self.pull_request_id ||= select_pull_request
 
+        return nil if pull_request_id.nil?
+
         check_out_branch
         merge_pull_request
         comment_about_merge
@@ -29,7 +31,12 @@ module Ninny
 
       def select_pull_request
         choices = Ninny.repo.open_pull_requests.map { |pr| { name: pr.title, value: pr.number } }
-        prompt.select("Which #{Ninny.repo.pull_request_label}?", choices)
+
+        if choices.empty?
+          prompt.say "There don't seem to be any open merge requests."
+        else
+          prompt.select("Which #{Ninny.repo.pull_request_label}?", choices)
+        end
       end
       private :select_pull_request
 

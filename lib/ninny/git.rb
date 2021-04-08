@@ -169,7 +169,7 @@ module Ninny
 
     def prompt(**options)
       require 'tty-prompt'
-      TTY::Prompt.new(options)
+      TTY::Prompt.new(*options)
     end
 
     # Private: Ask the user if they wish to delete and recreate a branch
