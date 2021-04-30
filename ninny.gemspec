@@ -35,7 +35,6 @@ Gem::Specification.new do |spec|
   spec.add_dependency 'tty-config', '~> 0.3'
   spec.add_dependency 'tty-prompt', '~> 0.23'
 
-  spec.add_development_dependency 'bundler', '~> 1.17'
   spec.add_development_dependency 'byebug', '~> 11.1'
   spec.add_development_dependency 'guard-rspec', '~> 4.3'
   spec.add_development_dependency 'pronto', '~> 0.11'
