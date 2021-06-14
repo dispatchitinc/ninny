@@ -13,16 +13,17 @@ module Ninny
         @project_id = Ninny.project_config.gitlab_project_id
       end
 
-      def current_pull_requests
-        merge_requests = gitlab.merge_requests(
-          project_id,
-          {
-            source_branch: Ninny.git.current_branch.name,
-            target_branch: Ninny.project_config.deploy_branch,
-            state: 'opened'
-          }
-        ).to_a
-        return merge_requests.each { |mr| to_pr(mr) }
+      def current_pull_request
+        to_pr(
+          gitlab.merge_requests(
+            project_id,
+            {
+              source_branch: Ninny.git.current_branch.name,
+              target_branch: Ninny.project_config.deploy_branch,
+              state: 'opened'
+            }
+          ).last
+        )
       end
 
       def pull_request_label

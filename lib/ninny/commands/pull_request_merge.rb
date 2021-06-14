@@ -16,11 +16,8 @@ module Ninny
 
       def execute(*)
         unless pull_request_id
-          currents = Ninny.repo.current_pull_requests
-
-          if currents.length == 1
-            self.pull_request_id = current.number
-          end
+          current = Ninny.repo.current_pull_request
+          self.pull_request_id = current.number if current
         end
 
         self.pull_request_id ||= select_pull_request
