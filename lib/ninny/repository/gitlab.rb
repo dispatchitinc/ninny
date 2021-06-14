@@ -17,7 +17,11 @@ module Ninny
         to_pr(
           gitlab.merge_requests(
             project_id,
-            { source_branch: Ninny.git.current_branch.name, target_branch: Ninny.project_config.deploy_branch }
+            {
+              source_branch: Ninny.git.current_branch.name,
+              target_branch: Ninny.project_config.deploy_branch,
+              state: 'opened'
+            }
           ).last
         )
       end
