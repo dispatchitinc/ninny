@@ -5,7 +5,6 @@ on:
 
 jobs:
   bundler-audit:
-    if:
     runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@v2
@@ -21,7 +20,7 @@ jobs:
         bundler-audit
 
         if [ $? -eq 0 ]; then
-          echo "No vulnerabilities found."
+          echo "No gem vulnerabilities found."
         else
           echo "Gem vulnerabilities found!"
           exit 1
