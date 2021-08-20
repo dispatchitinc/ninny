@@ -42,7 +42,6 @@ RSpec.describe Ninny::Commands::PullRequestMerge do
 
     it 'should create new branch if there is not one' do
       allow(Ninny.git).to receive(:branches_for).and_return([])
-
       expect_any_instance_of(TTY::Prompt).to receive(:say).with("No #{branch_type} branch available. Creating one now.")
       expect_any_instance_of(Ninny::Commands::CreateDatedBranch).to receive(:execute)
       subject.check_out_branch
@@ -61,12 +60,27 @@ RSpec.describe Ninny::Commands::PullRequestMerge do
   end
 
   context '#comment_about_merge' do
-    it 'should comment to the pull_request' do
-      pr = double(:pull_request)
-      allow(subject).to receive(:branch_to_merge_into).and_return('staging')
-      allow(subject).to receive(:pull_request).and_return(pr)
-      expect(pr).to receive(:write_comment).with('Merged into staging.')
-      subject.comment_about_merge
+    context 'when no user name is passed in' do
+      it 'should comment to the pull_request' do
+        pr = double(:pull_request)
+        allow(subject).to receive(:branch_to_merge_into).and_return('staging')
+        allow(subject).to receive(:pull_request).and_return(pr)
+        allow(subject).to receive(:`).with('git config user.name').and_return('Test User')
+        expect(pr).to receive(:write_comment).with('Merged into staging by Test User.')
+        subject.comment_about_merge
+      end
+    end
+
+    context 'when a user name is passed in' do
+      it 'should comment to the pull_request' do
+        pr = double(:pull_request)
+        allow(subject).to receive(:branch_to_merge_into).and_return('staging')
+        allow(subject).to receive(:pull_request).and_return(pr)
+        allow(subject).to receive(:username).and_return('Given User')
+        expect(subject).not_to receive(:`).with('git config user.name')
+        expect(pr).to receive(:write_comment).with('Merged into staging by Given User.')
+        subject.comment_about_merge
+      end
     end
   end
 
