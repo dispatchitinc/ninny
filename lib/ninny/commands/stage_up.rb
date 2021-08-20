@@ -9,6 +9,7 @@ module Ninny
       def initialize(pull_request_id, options)
         super
         @branch_type = Ninny::Git::STAGING_PREFIX
+        @username = options[:username]
       end
     end
   end

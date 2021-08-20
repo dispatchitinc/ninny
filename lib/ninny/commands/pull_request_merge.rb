@@ -6,7 +6,7 @@ module Ninny
   module Commands
     class PullRequestMerge < Ninny::Command
       attr_accessor :pull_request_id, :options, :pull_request
-      attr_reader :branch_type
+      attr_reader :branch_type, :username
 
       def initialize(pull_request_id, options)
         @branch_type = options[:branch_type] || Ninny::Git::STAGING_PREFIX
@@ -65,7 +65,10 @@ module Ninny
       #
       # Returns a String
       def comment_body
-        "Merged into #{branch_to_merge_into}."
+        user = username || determine_local_user
+        body = "Merged into #{branch_to_merge_into}".dup
+        body << " by #{user}" if user
+        body << '.'
       end
 
       # Public: Find the pull request
@@ -82,6 +85,11 @@ module Ninny
       # Returns a String
       def branch_to_merge_into
         @branch_to_merge_into ||= Ninny.git.latest_branch_for(branch_type)
+      end
+
+      def determine_local_user
+        local_user_name = `git config user.name`.strip
+        local_user_name.empty? ? nil : local_user_name
       end
     end
   end

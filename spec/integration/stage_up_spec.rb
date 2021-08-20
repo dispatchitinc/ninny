@@ -9,6 +9,7 @@ RSpec.describe '`ninny stage_up` command', type: :cli do
 
       Options:
         -h, [--help], [--no-help]  # Display usage information
+        -u, [--username=USERNAME]  # The name of the user who is staging up; defaults to the local git config's user
 
       Merges PR/MR into the staging branch
     OUT

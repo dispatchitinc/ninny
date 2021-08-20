@@ -31,6 +31,8 @@ module Ninny
 
     desc 'stage_up [PULL_REQUEST_ID]', 'Merges PR/MR into the staging branch'
     method_option :help, aliases: '-h', type: :boolean, desc: 'Display usage information'
+    method_option :username, aliases: '-u', type: :string,
+                             desc: "The name of the user who is staging up; defaults to the local git config's user"
     def stage_up(pull_request_id = nil)
       if options[:help]
         invoke :help, ['stage_up']
