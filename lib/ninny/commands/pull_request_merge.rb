@@ -66,7 +66,7 @@ module Ninny
       # Returns a String
       def comment_body
         user = username || determine_local_user
-        body = "Merged into #{branch_to_merge_into}"
+        body = "Merged into #{branch_to_merge_into}".dup
         body << " by #{user}" if user
         body << '.'
       end
