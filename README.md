@@ -72,7 +72,6 @@ $ ninny staging_branch
 
 # To merge the current branch into the current/latest staging branch
 $ ninny stage_up
-
 ```
 
 At any point, `ninny help` will show the help screen.
