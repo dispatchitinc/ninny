@@ -1,0 +1,10 @@
+title = 'GitLeaks Allowlist'
+
+[allowlist]
+  description = 'A list of commits and secrets to skip when scanning for secrets'
+  commits = [
+    'ExampleCommit'
+  ]
+  regexes = [
+    'ExampleSecret'
+  ]
