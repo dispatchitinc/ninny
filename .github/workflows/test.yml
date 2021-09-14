@@ -39,8 +39,13 @@ jobs:
       with:
         fetch-depth: 0
     - run: |
+        if [[ ${{ github.REF }} == 'refs/heads/main' ]]; then
+          CURRENT_COMMIT="${{ github.SHA }}"
+        else
+          CURRENT_COMMIT="${{ github.EVENT.PULL_REQUEST.HEAD.SHA }}"
+        fi
         echo "COMMITS=$(
-          git rev-list ${{ github.SHA }} ^origin/main | sed 's/^\|$//g' | paste -sd, -
+          git rev-list $CURRENT_COMMIT ^origin/main | sed 's/^\|$//g' | paste -sd, -
         )" >> $GITHUB_ENV
     - name: GitLeaks
       uses: addnab/docker-run-action@v3
