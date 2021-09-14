@@ -31,3 +31,23 @@ jobs:
     - uses: HeRoMo/pronto-action@v1.13.0
       with:
         github_token: ${{ secrets.GITHUB_TOKEN }}
+  gitleaks:
+    if: github.EVENT_NAME == 'pull_request'
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v2
+      with:
+        fetch-depth: 0
+    - run: |
+        echo "COMMITS=$(
+          git rev-list ${{ github.SHA }} ^origin/main | sed 's/^\|$//g' | paste -sd, -
+        )" >> $GITHUB_ENV
+    - name: GitLeaks
+      uses: addnab/docker-run-action@v3
+      with:
+        image: zricethezav/gitleaks
+        options: -v ${{ github.WORKSPACE }}:/app
+        run: |
+          cd /app
+          gitleaks --verbose --additional-config='.github/workflows/gitleaks.toml' \
+                   --path='./' --commits='${{ env.COMMITS }}'
