@@ -62,4 +62,4 @@ jobs:
           cd /app
           gitleaks detect --verbose --source='./' \
             --config='.github/workflows/official.toml' \
-            --log-opts='${{ env.LOG_OPTS }}'
+            --log-opts=${{ env.LOG_OPTS }}
