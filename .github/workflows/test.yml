@@ -5,6 +5,9 @@ on:
   pull_request:
     branches: [ main ]
 
+env:
+  GITLEAKS_REF: f15b4e408b12fda7e2833f8a32c0d8a045bd48a0
+
 jobs:
   test:
     runs-on: ubuntu-latest
@@ -43,8 +46,13 @@ jobs:
           -L "https://api.github.com/repos/zricethezav/gitleaks/contents/config/gitleaks.toml?ref=${{ env.GITLEAKS_REF }}" \
           >> ${{ github.WORKSPACE }}/.github/workflows/original.toml
         sed "/\[allowlist\]/,/^$/d" ${{ github.WORKSPACE }}/.github/workflows/original.toml >> ${{ github.WORKSPACE }}/.github/workflows/official.toml
-        cat .gitlab/ci/gitleaks.toml >> .gitlab/ci/official.toml
-        echo "LOG_OPTS='^origin/main ${{ github.EVENT.PULL_REQUEST.HEAD.SHA }}'" >> $GITHUB_ENV
+        cat .github/workflows/gitleaks.toml >> .github/workflows/official.toml
+        if [[ ${{ github.REF }} == 'refs/heads/main' ]]; then
+          CURRENT_COMMIT="${{ github.SHA }}"
+        else
+          CURRENT_COMMIT="${{ github.EVENT.PULL_REQUEST.HEAD.SHA }}"
+        fi
+        echo "LOG_OPTS='^origin/main $CURRENT_COMMIT'" >> $GITHUB_ENV
     - name: GitLeaks
       uses: addnab/docker-run-action@v3
       with:
@@ -52,5 +60,6 @@ jobs:
         options: -v ${{ github.WORKSPACE }}:/app
         run: |
           cd /app
-          gitleaks detect --verbose --config='.github/workflows/official.toml' \
-                   --source='./' --log-opts='${{ env.LOG_OPTS }}'
+          gitleaks detect --verbose --source='./' \
+            --config='.github/workflows/official.toml' \
+            --log-opts='${{ env.LOG_OPTS }}'
