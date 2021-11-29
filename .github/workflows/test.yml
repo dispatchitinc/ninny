@@ -39,20 +39,18 @@ jobs:
       with:
         fetch-depth: 0
     - run: |
-        if [[ ${{ github.REF }} == 'refs/heads/main' ]]; then
-          CURRENT_COMMIT="${{ github.SHA }}"
-        else
-          CURRENT_COMMIT="${{ github.EVENT.PULL_REQUEST.HEAD.SHA }}"
-        fi
-        echo "COMMITS=$(
-          git rev-list $CURRENT_COMMIT ^origin/main | sed 's/^\|$//g' | paste -sd, -
-        )" >> $GITHUB_ENV
+        curl -H "Accept: application/vnd.github.v3.raw" \
+          -L "https://api.github.com/repos/zricethezav/gitleaks/contents/config/gitleaks.toml?ref=${{ env.GITLEAKS_REF }}" \
+          >> ${{ github.WORKSPACE }}/.github/workflows/original.toml
+        sed "/\[allowlist\]/,/^$/d" ${{ github.WORKSPACE }}/.github/workflows/original.toml >> ${{ github.WORKSPACE }}/.github/workflows/official.toml
+        cat .gitlab/ci/gitleaks.toml >> .gitlab/ci/official.toml
+        echo "LOG_OPTS='^origin/main ${{ github.EVENT.PULL_REQUEST.HEAD.SHA }}'" >> $GITHUB_ENV
     - name: GitLeaks
       uses: addnab/docker-run-action@v3
       with:
-        image: zricethezav/gitleaks
+        image: zricethezav/gitleaks:v8.0.4
         options: -v ${{ github.WORKSPACE }}:/app
         run: |
           cd /app
-          gitleaks --verbose --additional-config='.github/workflows/gitleaks.toml' \
-                   --path='./' --commits='${{ env.COMMITS }}'
+          gitleaks detect --verbose --config='.github/workflows/official.toml' \
+                   --source='./' --log-opts='${{ env.LOG_OPTS }}'
