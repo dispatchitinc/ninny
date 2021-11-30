@@ -56,16 +56,16 @@ module Ninny
       def paginated_merge_requests(project_id, params)
         page_number = 1
         counter = 1
-        pull_requests = []
+        merge_requests = []
 
         while counter > 0
-          page_pull_requests = gitlab.merge_requests(project_id, params.merge(page: page_number, per_page: 100))
-          pull_requests.concat(page_pull_requests)
-          counter = page_pull_requests.count
+          page_merge_requests = gitlab.merge_requests(project_id, params.merge(page: page_number, per_page: 100))
+          merge_requests.concat(page_merge_requests)
+          counter = page_merge_requests.count
           page_number += 1
         end
 
-        pull_requests
+        merge_requests
       end
     end
   end
