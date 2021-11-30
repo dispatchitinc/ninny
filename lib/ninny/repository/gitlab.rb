@@ -22,7 +22,7 @@ module Ninny
               target_branch: Ninny.project_config.deploy_branch,
               state: 'opened'
             }
-          ).last
+          ).auto_paginate.last
         )
       end
 
@@ -31,7 +31,7 @@ module Ninny
       end
 
       def open_pull_requests
-        gitlab.merge_requests(project_id, { state: 'opened' }).map { |mr| to_pr(mr) }
+        gitlab.merge_requests(project_id, { state: 'opened' }).auto_paginate.map { |mr| to_pr(mr) }
       end
 
       def pull_request(id)
