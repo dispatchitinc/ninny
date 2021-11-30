@@ -15,7 +15,7 @@ module Ninny
 
       def current_pull_request
         to_pr(
-          gitlab.merge_requests(
+          gitlab.paginated_merge_requests(
             project_id,
             {
               source_branch: Ninny.git.current_branch.name,
@@ -31,7 +31,7 @@ module Ninny
       end
 
       def open_pull_requests
-        gitlab.merge_requests(project_id, { state: 'opened' }).map { |mr| to_pr(mr) }
+        gitlab.paginated_merge_requests(project_id, { state: 'opened' }).map { |mr| to_pr(mr) }
       end
 
       def pull_request(id)
@@ -52,6 +52,21 @@ module Ninny
         )
       end
       private :to_pr
+
+      def paginated_merge_requests(project_id, params)
+        page_number = 1
+        counter = 1
+        pull_requests = []
+
+        while counter > 0
+          page_pull_requests = gitlab.merge_requests(project_id, params.merge(page: page_number, per_page: 100))
+          pull_requests.concat(page_pull_requests)
+          counter = page_pull_requests.count
+          page_number += 1
+        end
+
+        pull_requests
+      end
     end
   end
 end
