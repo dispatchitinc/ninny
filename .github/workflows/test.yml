@@ -6,7 +6,7 @@ on:
     branches: [ main ]
 
 env:
-  GITLEAKS_VERSION: v8.2.1
+  GITLEAKS_VERSION: v8.2.5
 
 jobs:
   test:
