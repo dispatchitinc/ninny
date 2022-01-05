@@ -6,7 +6,7 @@ on:
     branches: [ main ]
 
 env:
-  GITLEAKS_REF: f15b4e408b12fda7e2833f8a32c0d8a045bd48a0
+  GITLEAKS_VERSION: v8.2.5
 
 jobs:
   test:
@@ -14,7 +14,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        ruby: [2.6, 2.7, 3.0]
+        ruby: [2.6, 2.7, 3.0, 3.1]
     steps:
     - uses: actions/checkout@v2
       with:
@@ -31,7 +31,7 @@ jobs:
     - uses: actions/checkout@v2
       with:
         fetch-depth: 0
-    - uses: HeRoMo/pronto-action@v1.27.0
+    - uses: HeRoMo/pronto-action@v1.28.0
       with:
         github_token: ${{ secrets.GITHUB_TOKEN }}
   gitleaks:
@@ -43,7 +43,7 @@ jobs:
         fetch-depth: 0
     - run: |
         curl -H "Accept: application/vnd.github.v3.raw" \
-          -L "https://api.github.com/repos/zricethezav/gitleaks/contents/config/gitleaks.toml?ref=${{ env.GITLEAKS_REF }}" \
+          -L "https://api.github.com/repos/zricethezav/gitleaks/contents/config/gitleaks.toml?ref=${{ env.GITLEAKS_VERSION }}" \
           >> ${{ github.WORKSPACE }}/.github/workflows/original.toml
         sed "/\[allowlist\]/,/^$/d" ${{ github.WORKSPACE }}/.github/workflows/original.toml >> ${{ github.WORKSPACE }}/.github/workflows/official.toml
         cat .github/workflows/gitleaks.toml >> .github/workflows/official.toml
@@ -53,10 +53,9 @@ jobs:
           CURRENT_COMMIT="${{ github.EVENT.PULL_REQUEST.HEAD.SHA }}"
         fi
         echo "LOG_OPTS='^origin/main $CURRENT_COMMIT'" >> $GITHUB_ENV
-    - name: GitLeaks
-      uses: addnab/docker-run-action@v3
+    - uses: addnab/docker-run-action@v3
       with:
-        image: zricethezav/gitleaks:v8.0.4
+        image: zricethezav/gitleaks:${{ env.GITLEAKS_VERSION }}
         options: -v ${{ github.WORKSPACE }}:/app
         run: |
           cd /app

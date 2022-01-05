@@ -14,6 +14,7 @@ Gem::Specification.new do |spec|
   spec.summary       = 'ninny (n): an foolish person, see: git'
   spec.description   = 'Ninny is a command line workflow for git with GitLab'
   spec.homepage      = 'https://github.com/dispatchinc/ninny'
+  spec.metadata      = { 'rubygems_mfa_required' => 'false' }
 
   # Specify which files should be added to the gem when it is released.
   # The `git ls-files -z` loads the files in the RubyGem that have been added into git.

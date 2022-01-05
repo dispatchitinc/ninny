@@ -12,19 +12,11 @@ jobs:
         fetch-depth: 0
     - uses: ruby/setup-ruby@v1
       with:
-        ruby-version: 3.0
         bundler-cache: true
     - run: |
         gem install bundler-audit
         bundler-audit update
         bundler-audit
-
-        if [ $? -eq 0 ]; then
-          echo "No gem vulnerabilities found."
-        else
-          echo "Gem vulnerabilities found!"
-          exit 1
-        fi
   bundle-outdated:
     runs-on: ubuntu-latest
     steps:
@@ -33,14 +25,5 @@ jobs:
         fetch-depth: 0
     - uses: ruby/setup-ruby@v1
       with:
-        ruby-version: 3.0
         bundler-cache: true
-    - run: |
-        bundle outdated --strict
-
-        if [ $? -eq 0 ]; then
-          echo "No outdated gems found."
-        else
-          echo "Outdated gems found!"
-          exit 1
-        fi
+    - run: bundle outdated --strict

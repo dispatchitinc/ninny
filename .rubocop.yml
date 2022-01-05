@@ -1,11 +1,14 @@
 AllCops:
   NewCops: enable
   SuggestExtensions: false
-  TargetRubyVersion: 3.0
+  TargetRubyVersion: 3.1
   Exclude:
     - vendor/**/*
 
 Gemspec/RequiredRubyVersion:
+  Enabled: false
+
+Gemspec/RequireMFA:
   Enabled: false
 
 Style/Documentation:
