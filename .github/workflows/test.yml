@@ -31,7 +31,7 @@ jobs:
     - uses: actions/checkout@v2
       with:
         fetch-depth: 0
-    - uses: HeRoMo/pronto-action@v1.27.0
+    - uses: HeRoMo/pronto-action@v1.28.0
       with:
         github_token: ${{ secrets.GITHUB_TOKEN }}
   gitleaks:
@@ -53,8 +53,7 @@ jobs:
           CURRENT_COMMIT="${{ github.EVENT.PULL_REQUEST.HEAD.SHA }}"
         fi
         echo "LOG_OPTS='^origin/main $CURRENT_COMMIT'" >> $GITHUB_ENV
-    - name: GitLeaks
-      uses: addnab/docker-run-action@v3
+    - uses: addnab/docker-run-action@v3
       with:
         image: zricethezav/gitleaks:${{ env.GITLEAKS_VERSION }}
         options: -v ${{ github.WORKSPACE }}:/app
