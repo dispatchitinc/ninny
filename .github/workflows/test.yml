@@ -6,7 +6,7 @@ on:
     branches: [ main ]
 
 env:
-  GITLEAKS_VERSION: v8.2.7
+  GITLEAKS_VERSION: v8.7.1
 
 jobs:
   test:
@@ -16,7 +16,7 @@ jobs:
       matrix:
         ruby: [2.6, 2.7, 3.0, 3.1]
     steps:
-    - uses: actions/checkout@v2
+    - uses: actions/checkout@v3
       with:
         fetch-depth: 0
     - uses: ruby/setup-ruby@v1
@@ -28,17 +28,17 @@ jobs:
     if: github.EVENT_NAME == 'pull_request'
     runs-on: ubuntu-latest
     steps:
-    - uses: actions/checkout@v2
+    - uses: actions/checkout@v3
       with:
         fetch-depth: 0
-    - uses: HeRoMo/pronto-action@v1.28.0
+    - uses: HeRoMo/pronto-action@v1.32.0
       with:
         github_token: ${{ secrets.GITHUB_TOKEN }}
   gitleaks:
     if: github.EVENT_NAME == 'pull_request'
     runs-on: ubuntu-latest
     steps:
-    - uses: actions/checkout@v2
+    - uses: actions/checkout@v3
       with:
         fetch-depth: 0
     - run: |
@@ -59,6 +59,7 @@ jobs:
         options: -v ${{ github.WORKSPACE }}:/app
         run: |
           cd /app
+          git config --global --add safe.directory /app
           gitleaks detect --verbose --source='./' \
             --config='.github/workflows/official.toml' \
             --log-opts=${{ env.LOG_OPTS }}
