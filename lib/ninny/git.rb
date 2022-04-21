@@ -38,7 +38,7 @@ module Ninny
 
     def merge(branch_name)
       if_clean do
-        `git fetch --prune`
+        `git fetch --prune &> /dev/null`
         command 'merge', ['--no-ff', "origin/#{branch_name}"]
         raise MergeFailed unless clean?
 
@@ -65,7 +65,7 @@ module Ninny
     # branch_name - The name of the branch to check out
     # do_after_pull - Should a pull be done after checkout?
     def check_out(branch, do_after_pull = true)
-      `git fetch --prune`
+      `git fetch --prune &> /dev/null`
       git.checkout(branch)
       pull if do_after_pull
       raise CheckoutFailed, "Failed to check out '#{branch}'" unless current_branch.name == branch.name
@@ -84,7 +84,7 @@ module Ninny
     # new_branch_name - The name of the branch to create
     # source_branch_name - The name of the branch to branch from
     def new_branch(new_branch_name, source_branch_name)
-      `git fetch --prune`
+      `git fetch --prune &> /dev/null`
       remote_branches = command('branch', ['--remote'])
 
       if remote_branches.include?("origin/#{new_branch_name}")
@@ -117,7 +117,7 @@ module Ninny
     #
     # Returns an Array of Strings containing the branch names
     def remote_branches
-      `git fetch --prune`
+      `git fetch --prune &> /dev/null`
       git.branches.remote.map { |branch| git.branch(branch.name) }.sort_by(&:name)
     end
 
