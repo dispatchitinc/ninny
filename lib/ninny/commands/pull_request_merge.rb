@@ -45,9 +45,6 @@ module Ninny
         prompt.say "Checking out #{branch_to_merge_into}."
         Ninny.git.check_out(branch_to_merge_into, false)
         Ninny.git.track_current_branch
-      rescue Ninny::Git::NoBranchOfType
-        prompt.say "No #{branch_type} branch available. Creating one now."
-        CreateDatedBranch.new(branch: branch_type).execute
       end
 
       # Public: Merge the pull request's branch into the checked-out branch
