@@ -38,7 +38,7 @@ module Ninny
       def delete_old_branches
         return unless extra_branches.any?
 
-        should_delete = should_delete_old_branches || prompt.yes?(
+        should_delete = should_delete_old_branches || prompt.no?(
           "Do you want to delete the old #{branch_type} branch(es)? (#{extra_branches.join(', ')})"
         )
 
