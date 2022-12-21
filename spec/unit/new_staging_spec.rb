@@ -62,7 +62,7 @@ RSpec.describe Ninny::Commands::NewStaging do
         allow(subject).to receive(:should_delete_old_branches).and_return(false)
         expect(Ninny.git).to receive(:delete_branch).with(branch_one)
         expect(Ninny.git).to receive(:delete_branch).with(branch_two)
-        expect_any_instance_of(TTY::Prompt).to receive(:yes?).with(
+        expect_any_instance_of(TTY::Prompt).to receive(:no?).with(
           /Do you want to delete the old staging branch(es)?/
         ).and_return(true)
         subject.delete_old_branches

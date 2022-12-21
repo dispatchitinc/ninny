@@ -138,7 +138,8 @@ module Ninny
     #
     # Returns an Array of Branches containing the branch name
     def latest_branch_for(prefix)
-      branches_for(prefix).last || raise(NoBranchOfType, "No #{prefix} branch")
+      # I don't really see why the first part would break, and the second would work, but you never know
+      branches_for(prefix).last || Ninny.git.branches_for(prefix).last || raise(NoBranchOfType, "No #{prefix} branch")
     end
 
     # Public: Whether the Git index is clean (has no uncommited changes)

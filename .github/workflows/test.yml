@@ -9,6 +9,21 @@ env:
   GITLEAKS_VERSION: v8.15.1
 
 jobs:
+  test:
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        ruby: [2.6, 2.7, 3.0, 3.1]
+    steps:
+    - uses: actions/checkout@v3
+      with:
+        fetch-depth: 0
+    - uses: ruby/setup-ruby@v1
+      with:
+        ruby-version: ${{ matrix.ruby }}
+        bundler-cache: true
+    - run: bundle exec rake
   pronto:
     if: github.EVENT_NAME == 'pull_request'
     runs-on: ubuntu-latest
