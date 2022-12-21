@@ -46,7 +46,8 @@ module Ninny
         Ninny.git.check_out(branch_to_merge_into, false)
         Ninny.git.track_current_branch
       rescue Ninny::Git::NoBranchOfType
-        prompt.say "Could not find a #{branch_type} branch. Please create one or double check it exists. If it exists, please do a fresh git pull or git fetch to ensure Ninny can find it."
+        prompt.say "Could not find a #{branch_type} branch. Please create one or double check it exists. If it " \
+                   'exists, please do a fresh git pull or git fetch to ensure Ninny can find it.'
       end
 
       # Public: Merge the pull request's branch into the checked-out branch

@@ -42,7 +42,10 @@ RSpec.describe Ninny::Commands::PullRequestMerge do
 
     it 'should end if there is no branch' do
       allow(Ninny.git).to receive(:branches_for).and_return([])
-      expect_any_instance_of(TTY::Prompt).to receive(:say).with("Could not find a staging branch. Please create one or double check it exists. If it exists, please do a fresh git pull or git fetch to ensure Ninny can find it.")
+      expect_any_instance_of(TTY::Prompt).to receive(:say).with(
+        'Could not find a staging branch. Please create one or double check it exists. If it exists, ' \
+        'please do a fresh git pull or git fetch to ensure Ninny can find it.'
+      )
       subject.check_out_branch
     end
   end
