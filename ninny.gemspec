@@ -26,7 +26,7 @@ Gem::Specification.new do |spec|
   spec.executables           = spec.files.grep(%r{^exe/}) { |f| File.basename(f) }
   spec.require_paths         = ['lib']
 
-  spec.add_dependency 'git', '~> 1.5'
+  spec.add_dependency 'git', '>= 1.5', '<= 1.13.2'
   spec.add_dependency 'gitlab', '~> 4.11'
   spec.add_dependency 'pastel', '~> 0.8'
   spec.add_dependency 'thor', '< 2'
