@@ -34,7 +34,7 @@ RSpec.describe Ninny::Git do
   context '#merge' do
     it 'should fetch and merge branch_name' do
       expect(subject).to receive(:`).with('git fetch --prune &> /dev/null')
-      expect(git_lib).to receive(:command).with('merge', ['--no-ff', 'origin/branch_to_merge'])
+      expect(git_lib).to receive(:command).with('merge', '--no-ff', 'origin/branch_to_merge')
       expect(subject).to receive(:push)
       subject.merge('branch_to_merge')
     end
@@ -46,10 +46,10 @@ RSpec.describe Ninny::Git do
         new_branch = double(:new_branch)
         expect(new_branch).to receive(:checkout)
         expect(subject).to receive(:`).with('git fetch --prune &> /dev/null')
-        expect(subject).to receive(:command).with('branch', ['--remote']).and_return('')
-        expect(subject).to receive(:command).with('branch', ['--no-track', 'new_branch', 'origin/main'])
+        expect(subject).to receive(:command).with('branch', '--remote').and_return('')
+        expect(subject).to receive(:command).with('branch', '--no-track', 'new_branch', 'origin/main')
         expect(subject).to receive(:branch).with('new_branch').and_return(new_branch)
-        expect(subject).to receive(:command).with('push', ['-u', 'origin', 'new_branch'])
+        expect(subject).to receive(:command).with('push', '-u', 'origin', 'new_branch')
         subject.new_branch('new_branch', 'main')
       end
 
@@ -57,10 +57,10 @@ RSpec.describe Ninny::Git do
         new_branch = double(:new_branch)
         expect(new_branch).to receive(:checkout)
         expect(subject).to receive(:`).with('git fetch --prune &> /dev/null')
-        expect(subject).to receive(:command).with('branch', ['--remote']).and_return('')
-        expect(subject).to receive(:command).with('branch', ['--no-track', 'new_branch', 'origin/main'])
+        expect(subject).to receive(:command).with('branch', '--remote').and_return('')
+        expect(subject).to receive(:command).with('branch', '--no-track', 'new_branch', 'origin/main')
         expect(subject).to receive(:branch).with('new_branch').and_return(new_branch)
-        expect(subject).to receive(:command).with('push', ['-u', 'origin', 'new_branch']).and_raise(::Git::GitExecuteError.new(':fatal: A branch named new_branch already exists'))
+        expect(subject).to receive(:command).with('push', '-u', 'origin', 'new_branch').and_raise(::Git::GitExecuteError.new(':fatal: A branch named new_branch already exists'))
         allow(subject).to receive(:exit)
         allow(subject).to receive(:puts)
         subject.new_branch('new_branch', 'main')
@@ -70,7 +70,7 @@ RSpec.describe Ninny::Git do
     context 'if the remote branch already exists' do
       it 'should ask the user if they would like to recreate the existing branch' do
         expect(subject).to receive(:`).with('git fetch --prune &> /dev/null')
-        expect(subject).to receive(:command).with('branch', ['--remote']).and_return('origin/new_branch')
+        expect(subject).to receive(:command).with('branch', '--remote').and_return('origin/new_branch')
         allow(subject).to receive(:exit)
         expect(subject).to receive(:prompt).and_return(double(yes?: false))
         subject.new_branch('new_branch', 'main')
@@ -80,10 +80,10 @@ RSpec.describe Ninny::Git do
         new_branch = double(:new_branch)
         expect(new_branch).to receive(:checkout)
         expect(subject).to receive(:`).with('git fetch --prune &> /dev/null').at_least(:twice)
-        expect(subject).to receive(:command).with('branch', ['--remote']).and_return('origin/new_branch', '')
-        expect(subject).to receive(:command).with('branch', ['--no-track', 'new_branch', 'origin/main'])
+        expect(subject).to receive(:command).with('branch', '--remote').and_return('origin/new_branch', '')
+        expect(subject).to receive(:command).with('branch', '--no-track', 'new_branch', 'origin/main')
         expect(subject).to receive(:branch).with('new_branch').and_return(new_branch)
-        expect(subject).to receive(:command).with('push', ['-u', 'origin', 'new_branch'])
+        expect(subject).to receive(:command).with('push', '-u', 'origin', 'new_branch')
         expect(subject).to receive(:delete_branch)
         expect(subject).to receive(:prompt).and_return(double(yes?: true))
         subject.new_branch('new_branch', 'main')
@@ -91,7 +91,7 @@ RSpec.describe Ninny::Git do
 
       it 'should exit if the user says no to recreation' do
         expect(subject).to receive(:`).with('git fetch --prune &> /dev/null')
-        expect(subject).to receive(:command).with('branch', ['--remote']).and_return('origin/new_branch')
+        expect(subject).to receive(:command).with('branch', '--remote').and_return('origin/new_branch')
         expect(subject).to receive(:exit)
         expect(subject).to receive(:prompt).and_return(double(yes?: false))
         subject.new_branch('new_branch', 'main')

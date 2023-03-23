@@ -39,7 +39,7 @@ module Ninny
     def merge(branch_name)
       if_clean do
         `git fetch --prune &> /dev/null`
-        command 'merge', ['--no-ff', "origin/#{branch_name}"]
+        command('merge', '--no-ff', "origin/#{branch_name}")
         raise MergeFailed unless clean?
 
         push
@@ -75,7 +75,7 @@ module Ninny
     #
     # do_after_pull - Should a pull be done after tracking?
     def track_current_branch(do_after_pull = true)
-      command('branch', ['-u', "origin/#{current_branch_name}"])
+      command('branch', '-u', "origin/#{current_branch_name}")
       pull if do_after_pull
     end
 
@@ -85,7 +85,7 @@ module Ninny
     # source_branch_name - The name of the branch to branch from
     def new_branch(new_branch_name, source_branch_name)
       `git fetch --prune &> /dev/null`
-      remote_branches = command('branch', ['--remote'])
+      remote_branches = command('branch', '--remote')
 
       if remote_branches.include?("origin/#{new_branch_name}")
         ask_to_recreate_branch(new_branch_name, source_branch_name)
@@ -191,10 +191,10 @@ module Ninny
     # new_branch_name: the name of the branch in question
     # source_branch_name: the name of the branch the new branch is supposed to be based off of
     private def create_branch(new_branch_name, source_branch_name)
-      command('branch', ['--no-track', new_branch_name, "origin/#{source_branch_name}"])
+      command('branch', '--no-track', new_branch_name, "origin/#{source_branch_name}")
       new_branch = branch(new_branch_name)
       new_branch.checkout
-      command('push', ['-u', 'origin', new_branch_name])
+      command('push', '-u', 'origin', new_branch_name)
     end
 
     # Exceptions
