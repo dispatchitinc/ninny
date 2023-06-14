@@ -1,4 +1,4 @@
-name: Build
+name: "Auto/Trigger: Build & Push"
 on:
   push:
     branches: [ main ]
