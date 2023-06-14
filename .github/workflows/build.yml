@@ -1,6 +1,6 @@
 name: "Auto/Trigger: Build & Push"
+
 on:
-  pull_request: # testing
   push:
     branches: [ main ]
   workflow_dispatch:
