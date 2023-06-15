@@ -29,6 +29,7 @@ jobs:
     - uses: docker/build-push-action@v3
       with:
         context: .
+        labels: ${{ steps.meta.outputs.LABELS }}
+        provenance: false
         push: true
         tags: ${{ steps.meta.outputs.TAGS }}
-        labels: ${{ steps.meta.outputs.LABELS }}
