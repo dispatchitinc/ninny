@@ -1,5 +1,7 @@
 # Ninny
 
+> This project is archived as it won't receive any more bug fixes, feature development, or security updates.
+
 Ninny is a command line workflow for git with GitLab. It is maintained by the engineers of Dispatch.
 
 We use Ninny to help us automate our development pipelines. We create weekly staging branches straight from `main`, merge feature branches into the current staging branch, and deploy to our staging environment directly from the current staging branch. We date all of our staging branches with `YYYY.MM.DD` appended to the end so that if we need to recreate a new staging branch mid-week (typically if the staging branch gets very out of date from `main`), then we know exactly which branch is the latest.
